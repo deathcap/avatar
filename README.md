@@ -1,0 +1,6 @@
+# avatar
+
+## License
+
+MIT
+
