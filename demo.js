@@ -12,6 +12,7 @@ var shader
 var mesh
 var gl
 var skin
+var uv
 var shell = createShell({
   clearColor: [0, 0, 0, 1]
 })
@@ -65,12 +66,35 @@ function init() {
     , gl.ELEMENT_ARRAY_BUFFER
   )
 
+  // TODO: set real UV coordinates
+  uv = createBuffer(gl,
+      new Float32Array([
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+      ]))
+
   // Create a VAO from the position buffer, indexed by the
   // index buffer.
-  mesh = createVAO(gl, [{
-    buffer: pos
-    , size: 3
-  }], index)
+  mesh = createVAO(gl, [
+      {
+        buffer: pos
+        , size: 3
+      },
+      {
+        buffer: uv
+        , size: 2
+      }
+  ], index)
   mesh.length = cubeIndices.length
 
   // This super-basic shader is loaded in using glslify, see
@@ -99,10 +123,12 @@ function draw() {
   mat4.mul(proj, proj, view)
 
   shader.bind()
+  shader.attributes.position.location = 0
+  shader.attributes.uv.location = 1
   shader.uniforms.matrix = proj
   if (skin) shader.uniforms.skin = skin.bind()
   shader.attributes.position.pointer()
-  //shader.attributes.uv.pointer() // TODO: set UV
+  shader.attributes.uv.pointer()
 
   // Bind the VAO, and draw all of the elements
   // to the screen as triangles. The gl-vao module
