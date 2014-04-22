@@ -1,53 +1,54 @@
-'use strict';
+//Initialize shell
+var shell = require("gl-now")()
 
-var createShell = require('gl-now');
-var createCamera = require('game-shell-orbit-camera');
-var createVAO = require('gl-vao');
-var createBuffer = require('gl-buffer');
-var glslify = require('glslify');
-var glm = require('gl-matrix');
-var mat4 = glm.mat4;
+shell.on("gl-init", function() {
+  var gl = shell.gl
 
-var shell = createShell({clearColor: [0, 0, 0, 1]});
-var camera;
-var shader;
-var mesh;
+  //Create fragment shader
+  var fs = gl.createShader(gl.FRAGMENT_SHADER)
+  gl.shaderSource(fs, [
+    "void main() {",
+      "gl_FragColor = vec4(1, 0, 0, 1);",
+    "}"].join("\n"))
+  gl.compileShader(fs)
 
-shell.on('gl-init', function() {
-  var gl = shell.gl;
+  //Create vertex shader
+  var vs = gl.createShader(gl.VERTEX_SHADER)
+  gl.shaderSource(vs, [
+    "attribute vec3 position;",
+    "void main() {",
+      "gl_Position = vec4(position, 1.0);",
+    "}"].join("\n"))
+  gl.compileShader(vs)
 
-  camera = createCamera(shell);
+  //Link
+  var shader = gl.createProgram()
+  gl.attachShader(shader, fs)
+  gl.attachShader(shader, vs)
+  gl.linkProgram(shader)
+  gl.useProgram(shader)
 
-  shader = glslify({
-    vertex: './avatar.vert',
-    fragment: './avatar.frag'
-  })(gl);
+  //Create buffer
+  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer())
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+    -1, 0, 0,
+    0, -1, 0,
+    1, 1, 0
+  ]), gl.STATIC_DRAW)
 
-  var data = new Uint8Array(3);
-  var buffer = createBuffer(gl, data);
+  //Set up attribute pointer
+  var position_attribute = gl.getAttribLocation(shader, "position")
+  gl.enableVertexAttribArray(position_attribute)
+  gl.vertexAttribPointer(position_attribute, 3, gl.FLOAT, false, 0, 0)
+})
 
-  mesh = createVAO(gl, [{
-    buffer: buffer,
-    type: gl.UNSIGNED_BYTE,
-  }]);
-});
+shell.on("gl-render", function(t) {
+  var gl = shell.gl
 
-var viewMatrix = mat4.create();
-var projMatrix = mat4.create();
+  //Draw arrays
+  gl.drawArrays(gl.TRIANGLES, 0, 3)
+})
 
-shell.on('gl-render', function() {
-  var gl = shell.gl;
-
-  camera.view(viewMatrix);
-
-  mat4.perspective(projMatrix, Math.PI / 4, shell.width / shell.height, 0.001, 1000);
-  mat4.mul(projMatrix, projMatrix, viewMatrix);
-
-  shader.bind();
-  shader.uniforms.matrix = projMatrix
-  shader.attributes.position.location = 0;
-
-  mesh.bind();
-  gl.drawArrays(gl.TRIANGLES, 0, 3);
-  mesh.unbind();
-});
+shell.on("gl-error", function(e) {
+  throw new Error("WebGL not supported :(")
+})
