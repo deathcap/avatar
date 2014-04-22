@@ -102,6 +102,7 @@ function draw() {
   shader.uniforms.matrix = proj
   if (skin) shader.uniforms.skin = skin.bind()
   shader.attributes.position.pointer()
+  //shader.attributes.uv.pointer() // TODO: set UV
 
   // Bind the VAO, and draw all of the elements
   // to the screen as triangles. The gl-vao module
