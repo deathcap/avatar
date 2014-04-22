@@ -28,9 +28,14 @@ function init() {
   // Create the position buffer.
   var pos = createBuffer(gl
     , new Float32Array([
-      -1, 0, 0,
-      0, -1, 0,
-      1, 1, 0])
+      0,0,0,
+      0,0,1,
+      0,1,0,
+      0,1,1,
+      1,0,0,
+      1,0,1,
+      1,1,0,
+      1,1,1])
   )
 
   // Create the index buffer. This is instead packed into
@@ -40,7 +45,12 @@ function init() {
   // or WebGL will hassle you and refuse to draw the VAO.
   var index = createBuffer(gl
     , new Uint16Array([
-      0, 1, 2,
+      0,2,6, 0,6,4,
+      0,1,5, 0,3,5,
+      0,2,3, 0,3,1,
+      4,6,7, 4,7,5,
+      1,3,7, 1,5,7,
+      3,2,6, 3,7,6,
       ])
     , gl.ELEMENT_ARRAY_BUFFER
   )
@@ -51,9 +61,6 @@ function init() {
     buffer: pos
     , size: 3
   }], index)
-
-  // The total amount of elements to render.
-  mesh.length = 3
 
   // This super-basic shader is loaded in using glslify, see
   // shader.frag and shader.vert.
@@ -86,6 +93,6 @@ function draw() {
   // will handle when to use gl.drawArrays/gl.drawElements
   // for you.
   mesh.bind()
-  mesh.draw(gl.TRIANGLES, mesh.length)
+  mesh.draw(gl.TRIANGLES, 3*12)
   mesh.unbind()
 }
