@@ -3,12 +3,15 @@ var createBuffer = require('gl-buffer')
 var glslify      = require('glslify')
 var createShell  = require('gl-now')
 var createVAO    = require('gl-vao')
+var createTexture= require('gl-texture2d')
+var lena         = require('lena')
 
 var mat4 = require('gl-matrix').mat4
 
 var shader
 var mesh
 var gl
+var skin
 var shell = createShell({
   clearColor: [0, 0, 0, 1]
 })
@@ -18,6 +21,8 @@ shell.on('gl-render', draw)
 
 function init() {
   gl = shell.gl
+
+  skin = createTexture(gl, lena)
 
   // create the camera and adjust its
   // position to roughly center on the bunny
@@ -85,7 +90,8 @@ function draw() {
 
   shader.bind()
   shader.uniforms.matrix = proj
-  shader.attributes.position.location = 0
+  shader.uniforms.skin = skin.bind()
+  shader.attributes.position.pointer()
 
   // Bind the VAO, and draw all of the elements
   // to the screen as triangles. The gl-vao module
