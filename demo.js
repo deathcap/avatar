@@ -22,8 +22,7 @@ function init() {
   // create the camera and adjust its
   // position to roughly center on the bunny
   camera = createCamera(shell)
-  camera.distance = 20
-  camera.pan([0, 0.2])
+  camera.distance = 4
 
   // Create the position buffer.
   var pos = createBuffer(gl
