@@ -1,50 +1,89 @@
-'use strict';
+var createCamera = require('game-shell-orbit-camera')
+var pack         = require('array-pack-2d')
+var createBuffer = require('gl-buffer')
+var glslify      = require('glslify')
+var createShell  = require('gl-now')
+var createVAO    = require('gl-vao')
+var bunny        = require('bunny')
 
-var createShell = require('gl-now');
-var createCamera = require('game-shell-orbit-camera');
-var glslify = require('glslify');
-var glm = require('gl-matrix');
-var mat4 = glm.mat4;
+var mat4 = require('gl-matrix').mat4
 
-var shell = createShell();
-var shader;
-var camera;
-
-shell.on("gl-init", function() {
-  var gl = shell.gl
-
-  camera = createCamera(shell);
-
-  shader = glslify({vertex: './avatar.vert', fragment: './avatar.frag'})(gl);
-
-  //Create buffer
-  gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer())
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
-    -1, 0, 0,
-    0, -1, 0,
-    1, 1, 0
-  ]), gl.STATIC_DRAW)
-
-  //Set up attribute pointer
-  var position_attribute = gl.getAttribLocation(shader.handle, "position")
-  gl.enableVertexAttribArray(position_attribute)
-  gl.vertexAttribPointer(position_attribute, 3, gl.FLOAT, false, 0, 0)
+var shader
+var mesh
+var gl
+var shell = createShell({
+  clearColor: [0, 0, 0, 1]
 })
 
-var view = mat4.create();
-var proj = mat4.create();
+shell.on('gl-init', init)
+shell.on('gl-render', draw)
 
-shell.on("gl-render", function(t) {
-  var gl = shell.gl
+function init() {
+  gl = shell.gl
 
-  camera.view(view);
-  mat4.perspective(proj, Math.PI / 4, shell.width / shell.height, 0.001, 1000);
-  mat4.mul(proj, proj, view);
+  // create the camera and adjust its
+  // position to roughly center on the bunny
+  camera = createCamera(shell)
+  camera.distance = 20
+  camera.pan([0, 0.2])
 
-  shader.bind();
-  shader.uniforms.matrix = view;
-  shader.attributes.position.location = 0;
-  gl.drawArrays(gl.TRIANGLES, 0, 3)
-})
+  // Create the position buffer. This is packed into a
+  // Float32Array using the mesh-pack module.
+  var pos = createBuffer(gl
+    , pack(bunny.positions)
+  )
 
+  // Create the index buffer. This is instead packed into
+  // a UInt16Array: note that this is important, otherwise
+  // your model won't render correctly. Also important is
+  // that you label this buffer as an ELEMENT_ARRAY_BUFFER,
+  // or WebGL will hassle you and refuse to draw the VAO.
+  var index = createBuffer(gl
+    , pack(bunny.cells, 'uint16')
+    , gl.ELEMENT_ARRAY_BUFFER
+  )
 
+  // Create a VAO from the position buffer, indexed by the
+  // index buffer.
+  mesh = createVAO(gl, [{
+    buffer: pos
+    , size: 3
+  }], index)
+
+  // The total amount of elements to render.
+  mesh.length = bunny.cells.length * 3
+
+  // This super-basic shader is loaded in using glslify, see
+  // shader.frag and shader.vert.
+  shader = glslify({
+      vertex: './avatar.vert'
+    , fragment: './avatar.frag'
+  })(gl)
+}
+
+var view = new Float32Array(16)
+var proj = new Float32Array(16)
+
+function draw() {
+  camera.view(view)
+  mat4.perspective(proj
+    , Math.PI / 4
+    , shell.width / shell.height
+    , 0.001
+    , 1000
+  )
+
+  mat4.mul(proj, proj, view)
+
+  shader.bind()
+  shader.uniforms.matrix = proj
+  shader.attributes.position.location = 0
+
+  // Bind the VAO, and draw all of the elements
+  // to the screen as triangles. The gl-vao module
+  // will handle when to use gl.drawArrays/gl.drawElements
+  // for you.
+  mesh.bind()
+  mesh.draw(gl.TRIANGLES, mesh.length)
+  mesh.unbind()
+}
