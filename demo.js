@@ -78,6 +78,9 @@ var view = new Float32Array(16)
 var proj = new Float32Array(16)
 
 function draw() {
+  gl.enable(gl.CULL_FACE)
+  gl.enable(gl.DEPTH_TEST)
+
   camera.view(view)
   mat4.perspective(proj
     , Math.PI / 4
