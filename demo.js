@@ -36,6 +36,8 @@ var viewMatrix = mat4.create();
 var projMatrix = mat4.create();
 
 shell.on('gl-render', function() {
+  var gl = shell.gl;
+
   camera.view(viewMatrix);
 
   mat4.perspective(projMatrix, Math.PI / 4, shell.width / shell.height, 0.001, 1000);
@@ -45,4 +47,7 @@ shell.on('gl-render', function() {
   shader.uniforms.matrix = projMatrix
   shader.attributes.position.location = 0;
 
+  mesh.bind();
+  gl.drawArrays(gl.TRIANGLES, 0, 3);
+  mesh.unbind();
 });
