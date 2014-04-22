@@ -42,13 +42,7 @@ function init() {
       1,1,1])
   )
 
-  // Create the index buffer. This is instead packed into
-  // a UInt16Array: note that this is important, otherwise
-  // your model won't render correctly. Also important is
-  // that you label this buffer as an ELEMENT_ARRAY_BUFFER,
-  // or WebGL will hassle you and refuse to draw the VAO.
-  var index = createBuffer(gl
-    , new Uint16Array([
+  var cubeIndices = new Uint16Array([
       0,2,6, 0,6,4,
       0,1,5, 0,3,5,
       0,2,3, 0,3,1,
@@ -56,6 +50,14 @@ function init() {
       1,3,7, 1,5,7,
       3,2,6, 3,7,6,
       ])
+
+  // Create the index buffer. This is instead packed into
+  // a UInt16Array: note that this is important, otherwise
+  // your model won't render correctly. Also important is
+  // that you label this buffer as an ELEMENT_ARRAY_BUFFER,
+  // or WebGL will hassle you and refuse to draw the VAO.
+  var index = createBuffer(gl
+    , cubeIndices
     , gl.ELEMENT_ARRAY_BUFFER
   )
 
@@ -65,6 +67,7 @@ function init() {
     buffer: pos
     , size: 3
   }], index)
+  mesh.length = cubeIndices.length
 
   // This super-basic shader is loaded in using glslify, see
   // shader.frag and shader.vert.
@@ -101,6 +104,6 @@ function draw() {
   // will handle when to use gl.drawArrays/gl.drawElements
   // for you.
   mesh.bind()
-  mesh.draw(gl.TRIANGLES, 3*12)
+  mesh.draw(gl.TRIANGLES, mesh.length)
   mesh.unbind()
 }
