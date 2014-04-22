@@ -15,7 +15,8 @@
     "gl-matrix": "^2.1.0",
     "gl-buffer": "^2.0.6",
     "glslify": "^1.2.1",
-    "gl-texture2d": "^1.0.1"
+    "gl-texture2d": "^1.0.1",
+    "get-pixels": "^1.1.0"
   },
   "scripts": {
     "start": "beefy demo.js"
@@ -28,7 +29,6 @@
   "license": "MIT",
   "devDependencies": {
     "gl-now": "^1.3.1",
-    "game-shell-orbit-camera": "0.0.2",
-    "lena": "^1.0.0"
+    "game-shell-orbit-camera": "0.0.2"
   }
 }

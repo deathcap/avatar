@@ -4,7 +4,7 @@ var glslify      = require('glslify')
 var createShell  = require('gl-now')
 var createVAO    = require('gl-vao')
 var createTexture= require('gl-texture2d')
-var lena         = require('lena')
+var getPixels    = require('get-pixels')
 
 var mat4 = require('gl-matrix').mat4
 
@@ -22,7 +22,11 @@ shell.on('gl-render', draw)
 function init() {
   gl = shell.gl
 
-  skin = createTexture(gl, lena)
+  getPixels('./player.png', function(err, pixels) {
+    if (err) throw err
+
+    skin = createTexture(gl, pixels)
+  })
 
   // create the camera and adjust its
   // position to roughly center on the bunny
@@ -96,7 +100,7 @@ function draw() {
 
   shader.bind()
   shader.uniforms.matrix = proj
-  shader.uniforms.skin = skin.bind()
+  if (skin) shader.uniforms.skin = skin.bind()
   shader.attributes.position.pointer()
 
   // Bind the VAO, and draw all of the elements
