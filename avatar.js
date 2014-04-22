@@ -3,7 +3,9 @@
 // 64x64 skin format http://i.imgur.com/SnDKuc1.png
 // based on http://www.reddit.com/r/Minecraft/comments/1vd7ue/new_skin_layout_explanation_in_comments/
 var coords = {
-  // start x,y - size width,height
+  // name to start x,y - size width,height
+
+  // in both 32x32 and 64x64 skins
   head:       [ 0,  0, 32, 16],
   head2:      [32,  0, 32, 16],
 
@@ -11,6 +13,7 @@ var coords = {
   body:       [16, 16, 24, 16],
   right_arm:  [40, 16, 16, 16],
 
+  // only in 64x64 extended skins
   right_leg2: [ 0, 32, 16, 16],
   body2:      [16, 32, 24, 16],
   right_arm2: [40, 32, 16, 16],
