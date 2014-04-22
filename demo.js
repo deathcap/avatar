@@ -44,11 +44,11 @@ function init() {
 
   var cubeIndices = new Uint16Array([
       0,2,6, 0,6,4,
-      0,1,5, 0,3,5,
-      0,2,3, 0,3,1,
+      5,1,0, 4,5,0,
+      3,2,0, 0,1,3,
       4,6,7, 4,7,5,
-      1,3,7, 1,5,7,
-      3,2,6, 3,7,6,
+      7,3,1, 1,5,7,
+      6,2,3, 3,7,6,
       ])
 
   // Create the index buffer. This is instead packed into
