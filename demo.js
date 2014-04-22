@@ -1,10 +1,8 @@
 var createCamera = require('game-shell-orbit-camera')
-var pack         = require('array-pack-2d')
 var createBuffer = require('gl-buffer')
 var glslify      = require('glslify')
 var createShell  = require('gl-now')
 var createVAO    = require('gl-vao')
-var bunny        = require('bunny')
 
 var mat4 = require('gl-matrix').mat4
 
@@ -27,10 +25,12 @@ function init() {
   camera.distance = 20
   camera.pan([0, 0.2])
 
-  // Create the position buffer. This is packed into a
-  // Float32Array using the mesh-pack module.
+  // Create the position buffer.
   var pos = createBuffer(gl
-    , pack(bunny.positions)
+    , new Float32Array([
+      -1, 0, 0,
+      0, -1, 0,
+      1, 1, 0])
   )
 
   // Create the index buffer. This is instead packed into
@@ -39,7 +39,9 @@ function init() {
   // that you label this buffer as an ELEMENT_ARRAY_BUFFER,
   // or WebGL will hassle you and refuse to draw the VAO.
   var index = createBuffer(gl
-    , pack(bunny.cells, 'uint16')
+    , new Uint16Array([
+      0, 1, 2,
+      ])
     , gl.ELEMENT_ARRAY_BUFFER
   )
 
@@ -51,7 +53,7 @@ function init() {
   }], index)
 
   // The total amount of elements to render.
-  mesh.length = bunny.cells.length * 3
+  mesh.length = 3
 
   // This super-basic shader is loaded in using glslify, see
   // shader.frag and shader.vert.
