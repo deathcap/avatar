@@ -32,7 +32,7 @@ function init() {
   // create the camera and adjust its
   // position to roughly center on the bunny
   camera = createCamera(shell)
-  camera.distance = 4
+  camera.distance = 10
 
   // Create the position buffer.
   // see https://developer.mozilla.org/en-US/docs/Web/WebGL/Creating_3D_objects_using_WebGL
@@ -72,7 +72,7 @@ function init() {
     -1.0, -1.0, -1.0,
     -1.0, -1.0,  1.0,
     -1.0,  1.0,  1.0,
-    -1.0,  1.0, -1.0,
+    -1.0,  1.0, -1.0
     ])
   )
 
@@ -82,7 +82,7 @@ function init() {
     8,  9,  10,     8,  10, 11,   // top
     12, 13, 14,     12, 14, 15,   // bottom
     16, 17, 18,     16, 18, 19,   // right
-    20, 21, 22,     20, 22, 23,    // left
+    20, 21, 22,     20, 22, 23    // left
   ])
 
   // Create the index buffer. This is instead packed into
@@ -95,46 +95,39 @@ function init() {
     , gl.ELEMENT_ARRAY_BUFFER
   )
 
-  // TODO: set real UV coordinates
+  // TODO: set better UV coordinates
   uv = createBuffer(gl,
       new Float32Array([
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
-        0.5, 1.0,
+      // Front
+      0.0,  0.0,
+      1.0,  0.0,
+      1.0,  1.0,
+      0.0,  1.0,
+      // Back
+      0.0,  0.0,
+      1.0,  0.0,
+      1.0,  1.0,
+      0.0,  1.0,
+      // Top
+      0.0,  0.0,
+      1.0,  0.0,
+      1.0,  1.0,
+      0.0,  1.0,
+      // Bottom
+      0.0,  0.0,
+      1.0,  0.0,
+      1.0,  1.0,
+      0.0,  1.0,
+      // Right
+      0.0,  0.0,
+      1.0,  0.0,
+      1.0,  1.0,
+      0.0,  1.0,
+      // Left
+      0.0,  0.0,
+      1.0,  0.0,
+      1.0,  1.0,
+      0.0,  1.0
       ]))
 
   // Create a VAO from the position buffer, indexed by the
