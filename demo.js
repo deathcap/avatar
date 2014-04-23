@@ -154,8 +154,22 @@ function init() {
     uvArray[i + 7] = (y + h) / th
   }
 
+  var setCubeFacesUV = function(xys,w,h) {
+    for (var i = 0; i < xys.length; i += 2) {
+      var x = xys[i], y = xys[i + 1];
+      setCubeFaceUV(i / 2 * 8, x, y, w, h)
+    }
+  }
 
-  setCubeFaceUV(cubeFaceNameIndex.front, 8, 8)
+  //setCubeFaceUV(cubeFaceNameIndex.front, 8, 8)
+  setCubeFacesUV([
+    24, 8, // back
+     8, 8, // front
+     8, 0, // top
+    16, 0, // bottom
+     0, 8, // left
+    16, 8],// right
+    8, 8)  // dimensions
 
   uv = createBuffer(gl, uvArray)
 
