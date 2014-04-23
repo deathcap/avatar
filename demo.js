@@ -142,15 +142,15 @@ function init() {
     h = h || 8
 
     uvArray[i    ] =  x      / tw
-    uvArray[i + 1] =  y      / th
+    uvArray[i + 1] = (y + h) / th
 
-    uvArray[i + 2] = (x + w) / tw
+    uvArray[i + 2] =  x      / tw
     uvArray[i + 3] =  y      / th
 
     uvArray[i + 4] = (x + w) / tw
-    uvArray[i + 5] = (y + h) / th
+    uvArray[i + 5] =  y      / th
 
-    uvArray[i + 6] =  x      / tw
+    uvArray[i + 6] = (x + w) / tw
     uvArray[i + 7] = (y + h) / th
   }
 
