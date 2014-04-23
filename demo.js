@@ -38,13 +38,13 @@ function init() {
   // see https://developer.mozilla.org/en-US/docs/Web/WebGL/Creating_3D_objects_using_WebGL
   var vertices = createBuffer(gl
     , new Float32Array([
-    // Front face
+    // Back face
     -1.0, -1.0,  1.0,
      1.0, -1.0,  1.0,
      1.0,  1.0,  1.0,
     -1.0,  1.0,  1.0,
 
-    // Back face
+    // Front face
     -1.0, -1.0, -1.0,
     -1.0,  1.0, -1.0,
      1.0,  1.0, -1.0,
@@ -62,13 +62,13 @@ function init() {
      1.0, -1.0,  1.0,
     -1.0, -1.0,  1.0,
 
-    // Right face
+    // Left face
      1.0, -1.0, -1.0,
      1.0,  1.0, -1.0,
      1.0,  1.0,  1.0,
      1.0, -1.0,  1.0,
 
-    // Left face
+    // Right face
     -1.0, -1.0, -1.0,
     -1.0, -1.0,  1.0,
     -1.0,  1.0,  1.0,
@@ -77,12 +77,12 @@ function init() {
   )
 
   var cubeVertexIndices = new Uint16Array([
-    0,  1,  2,      0,  2,  3,    // front
-    4,  5,  6,      4,  6,  7,    // back
+    0,  1,  2,      0,  2,  3,    // back
+    4,  5,  6,      4,  6,  7,    // front
     8,  9,  10,     8,  10, 11,   // top
     12, 13, 14,     12, 14, 15,   // bottom
-    16, 17, 18,     16, 18, 19,   // right
-    20, 21, 22,     20, 22, 23    // left
+    16, 17, 18,     16, 18, 19,   // left
+    20, 21, 22,     20, 22, 23    // right
   ])
 
   // Create the index buffer. This is instead packed into
@@ -98,12 +98,12 @@ function init() {
   // TODO: set better UV coordinates
   uv = createBuffer(gl,
       new Float32Array([
-      // Front
+      // Back
       0.0,  0.0,
       1.0,  0.0,
       1.0,  1.0,
       0.0,  1.0,
-      // Back
+      // Front
       0.0,  0.0,
       1.0,  0.0,
       1.0,  1.0,
@@ -118,12 +118,12 @@ function init() {
       1.0,  0.0,
       1.0,  1.0,
       0.0,  1.0,
-      // Right
+      // Left
       0.0,  0.0,
       1.0,  0.0,
       1.0,  1.0,
       0.0,  1.0,
-      // Left
+      // Right
       0.0,  0.0,
       1.0,  0.0,
       1.0,  1.0,
