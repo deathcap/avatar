@@ -23,7 +23,7 @@ shell.on('gl-render', draw)
 function init() {
   gl = shell.gl
 
-  getPixels('./player.png', function(err, pixels) {
+  getPixels('./viking.png', function(err, pixels) {
     if (err) throw err
 
     skin = createTexture(gl, pixels)
