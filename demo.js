@@ -95,19 +95,18 @@ function init() {
     , gl.ELEMENT_ARRAY_BUFFER
   )
 
-  // TODO: set better UV coordinates
-  uv = createBuffer(gl,
-      new Float32Array([
+  // TODO: set correct UV coordinates
+  var uvArray = new Float32Array([
       // Back
       0.0,  0.0,
       1.0,  0.0,
       1.0,  1.0,
       0.0,  1.0,
       // Front
-      8/64,  8/32,
-      (8+8)/64,  8/32,
-      (8+8)/64,  (8+8)/32,
-      8/64,  (8+8)/32,
+      0,0,
+      0,0,
+      0,0,
+      0,0,
       // Top
       0.0,  0.0,
       1.0,  0.0,
@@ -128,7 +127,37 @@ function init() {
       1.0,  0.0,
       1.0,  1.0,
       0.0,  1.0
-      ]))
+      ])
+
+  var tw = 64, th = 32
+  var cubeFaceNameIndex = {
+    back:    0,
+    front:   8,
+    top:    16,
+    bottom: 24,
+    left:   32,
+    right:  40}
+  var setCubeFaceUV = function(i,x,y,w,h) {
+    w = w || 8
+    h = h || 8
+
+    uvArray[i    ] =  x      / tw
+    uvArray[i + 1] =  y      / th
+
+    uvArray[i + 2] = (x + w) / tw
+    uvArray[i + 3] =  y      / th
+
+    uvArray[i + 4] = (x + w) / tw
+    uvArray[i + 5] = (y + h) / th
+
+    uvArray[i + 6] =  x      / tw
+    uvArray[i + 7] = (y + h) / th
+  }
+
+
+  setCubeFaceUV(cubeFaceNameIndex.front, 8, 8)
+
+  uv = createBuffer(gl, uvArray)
 
   // Create a VAO from the position buffer, indexed by the
   // index buffer.
