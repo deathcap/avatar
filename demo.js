@@ -35,26 +35,55 @@ function init() {
   camera.distance = 4
 
   // Create the position buffer.
-  var pos = createBuffer(gl
+  // see https://developer.mozilla.org/en-US/docs/Web/WebGL/Creating_3D_objects_using_WebGL
+  var vertices = createBuffer(gl
     , new Float32Array([
-      0,0,0,
-      0,0,1,
-      0,1,0,
-      0,1,1,
-      1,0,0,
-      1,0,1,
-      1,1,0,
-      1,1,1])
+    // Front face
+    -1.0, -1.0,  1.0,
+     1.0, -1.0,  1.0,
+     1.0,  1.0,  1.0,
+    -1.0,  1.0,  1.0,
+
+    // Back face
+    -1.0, -1.0, -1.0,
+    -1.0,  1.0, -1.0,
+     1.0,  1.0, -1.0,
+     1.0, -1.0, -1.0,
+
+    // Top face
+    -1.0,  1.0, -1.0,
+    -1.0,  1.0,  1.0,
+     1.0,  1.0,  1.0,
+     1.0,  1.0, -1.0,
+
+    // Bottom face
+    -1.0, -1.0, -1.0,
+     1.0, -1.0, -1.0,
+     1.0, -1.0,  1.0,
+    -1.0, -1.0,  1.0,
+
+    // Right face
+     1.0, -1.0, -1.0,
+     1.0,  1.0, -1.0,
+     1.0,  1.0,  1.0,
+     1.0, -1.0,  1.0,
+
+    // Left face
+    -1.0, -1.0, -1.0,
+    -1.0, -1.0,  1.0,
+    -1.0,  1.0,  1.0,
+    -1.0,  1.0, -1.0,
+    ])
   )
 
-  var cubeIndices = new Uint16Array([
-      0,2,6, 0,6,4,
-      5,1,0, 4,5,0,
-      3,2,0, 0,1,3,
-      4,6,7, 4,7,5,
-      7,3,1, 1,5,7,
-      6,2,3, 3,7,6,
-      ])
+  var cubeVertexIndices = new Uint16Array([
+    0,  1,  2,      0,  2,  3,    // front
+    4,  5,  6,      4,  6,  7,    // back
+    8,  9,  10,     8,  10, 11,   // top
+    12, 13, 14,     12, 14, 15,   // bottom
+    16, 17, 18,     16, 18, 19,   // right
+    20, 21, 22,     20, 22, 23,    // left
+  ])
 
   // Create the index buffer. This is instead packed into
   // a UInt16Array: note that this is important, otherwise
@@ -62,7 +91,7 @@ function init() {
   // that you label this buffer as an ELEMENT_ARRAY_BUFFER,
   // or WebGL will hassle you and refuse to draw the VAO.
   var index = createBuffer(gl
-    , cubeIndices
+    , cubeVertexIndices
     , gl.ELEMENT_ARRAY_BUFFER
   )
 
@@ -81,13 +110,38 @@ function init() {
         0.5, 1.0,
         0.5, 1.0,
         0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
+        0.5, 1.0,
       ]))
 
   // Create a VAO from the position buffer, indexed by the
   // index buffer.
   mesh = createVAO(gl, [
       {
-        buffer: pos
+        buffer: vertices
         , size: 3
       },
       {
@@ -95,7 +149,7 @@ function init() {
         , size: 2
       }
   ], index)
-  mesh.length = cubeIndices.length
+  mesh.length = cubeVertexIndices.length
 
   // This super-basic shader is loaded in using glslify, see
   // shader.frag and shader.vert.
