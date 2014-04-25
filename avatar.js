@@ -56,7 +56,7 @@ var showUVs = function() {
 }
 
 var applyTransformToVertices = function(vertices, matrix) {
-  for (var i = 0; i < vertices.length / 3; ++i) {
+  for (var i = 0; i < vertices.length / 3; i += 1) {
     var vertex = vertices.subarray(i * 3, (i + 1) * 3)
 
     vec3.transformMat4(vertex, vertex, matrix)
@@ -66,15 +66,32 @@ var applyTransformToVertices = function(vertices, matrix) {
 var generateMesh = function(gl) {
   var boxes = []
 
+  // head
   var headMatrix = mat4.create()
+  boxes.push({matrix: headMatrix, uv: [
+    //u v  w  h
+    24, 8, 8, 8,  // back
+     8, 8, 8, 8,  // front
+     8, 0, 8, 8,  // top
+    16, 0, 8, 8,  // bottom
+     0, 8, 8, 8,  // left // TODO: this has to be rotated?
+    16, 8, 8, 8   // right
+  ]})
 
-  boxes.push({matrix: headMatrix})
-
+  // body
   var bodyMatrix = mat4.create()
   mat4.scale(bodyMatrix, bodyMatrix, [1.0, 1.5, 0.5])
   mat4.translate(bodyMatrix, bodyMatrix, [0, -1.0, 0]) // TODO: fix 1/8 offset Y
 
-  boxes.push({matrix: bodyMatrix})
+  boxes.push({matrix: bodyMatrix, uv: [
+    32, 20,  8, 12,
+    20, 20,  8, 12,
+    20, 16,  8,  4,
+    28, 16,  8,  4,
+    16, 20,  4, 12,
+    28, 20,  4, 12
+  ]})
+
 
   return generateBoxesMesh(gl, boxes)
 }
@@ -123,7 +140,7 @@ var generateBoxesMesh = function(gl, info) {
 
   // add vetices for each cube
   var verticesArray = new Float32Array(cube.length * cubeCount)
-  for (var i = 0; i < cubeCount; ++i) {
+  for (var i = 0; i < cubeCount; i += 1) {
     var thisCube = new Float32Array(cube.length)
     thisCube.set(cube)
 
@@ -146,8 +163,8 @@ var generateBoxesMesh = function(gl, info) {
 
   // repeat vertex indices for each cube, offset by cube vertex count
   var indexArray = new Uint16Array(cubeVertexIndices.length * cubeCount)
-  for (var i = 0; i < cubeCount; ++i) {
-    for (var j = 0; j < cubeVertexIndices.length; ++j) {
+  for (var i = 0; i < cubeCount; i += 1) {
+    for (var j = 0; j < cubeVertexIndices.length; j += 1) {
       indexArray[i * cubeVertexIndices.length + j] = cubeVertexIndices[j] + (cube.length / 3) * i
     }
   }
@@ -185,22 +202,17 @@ var generateBoxesMesh = function(gl, info) {
     uvArray[i + 7] = (y + h) / th
   }
 
-  // head
-  setCubeFaceUV(0, 24, 8, 8, 8) // back
-  setCubeFaceUV(1,  8, 8, 8, 8) // front
-  setCubeFaceUV(2,  8, 0, 8, 8) // top
-  setCubeFaceUV(3, 16, 0, 8, 8) // bottom
-  setCubeFaceUV(4,  0, 8, 8, 8) // left // TODO: this has to be rotated?
-  setCubeFaceUV(5, 16, 8, 8, 8) // right
+  for (var i = 0; i < cubeCount; i += 1) {
+    var uvs = info[i].uv
+    for (var face = 0; face < 6; face += 1) {
+      var x = uvs[4*face + 0]
+      var y = uvs[4*face + 1]
+      var w = uvs[4*face + 2]
+      var h = uvs[4*face + 3]
 
-  // body
-  setCubeFaceUV(6,  32, 20,  8, 12) // back
-  setCubeFaceUV(7,  20, 20,  8, 12) // front
-  setCubeFaceUV(8,  20, 16,  8,  4) // top
-  setCubeFaceUV(9,  28, 16,  8,  4) // bottom
-  setCubeFaceUV(10, 16, 20,  4, 12) // left
-  setCubeFaceUV(11, 28, 20,  4, 12) // right
-
+      setCubeFaceUV(6*i + face, x, y, w, h)
+    }
+  }
 
   var uv = createBuffer(gl, uvArray)
 
