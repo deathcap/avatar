@@ -34,8 +34,10 @@ function init() {
   camera = createCamera(shell)
   camera.distance = 10
 
+  // Create the position buffer.
   // see https://developer.mozilla.org/en-US/docs/Web/WebGL/Creating_3D_objects_using_WebGL
-  var cubeVertices = [
+  var vertices = createBuffer(gl
+    , new Float32Array([
     // Back face
     -1.0, -1.0,  1.0,
      1.0, -1.0,  1.0,
@@ -71,12 +73,8 @@ function init() {
     -1.0, -1.0,  1.0,
     -1.0,  1.0,  1.0,
     -1.0,  1.0, -1.0
-    ]
-
-  cubeVertices = cubeVertices.concat(cubeVertices)
-
-  // Create the position buffer.
-  var vertices = createBuffer(gl, new Float32Array(cubeVertices))
+    ])
+  )
 
   var cubeVertexIndices = new Uint16Array([
     0,  1,  2,      0,  2,  3,    // back
