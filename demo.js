@@ -99,16 +99,11 @@ function init() {
   var uvArray = new Float32Array(2 * 4 * 6)
 
   var tw = 64, th = 32
-  var cubeFaceNameIndex = {
-    back:    0,
-    front:   8,
-    top:    16,
-    bottom: 24,
-    left:   32,
-    right:  40}
-  var setCubeFaceUV = function(i,x,y,w,h) {
+  var setCubeFaceUV = function(face,x,y,w,h) {
     w = w || 8
     h = h || 8
+
+    var i = face * 8
 
     uvArray[i    ] =  x      / tw
     uvArray[i + 1] = (y + h) / th
@@ -123,21 +118,12 @@ function init() {
     uvArray[i + 7] = (y + h) / th
   }
 
-  var setCubeFacesUV = function(xys,w,h) {
-    for (var i = 0; i < xys.length; i += 2) {
-      var x = xys[i], y = xys[i + 1];
-      setCubeFaceUV(i / 2 * 8, x, y, w, h)
-    }
-  }
-
-  setCubeFacesUV([
-    24, 8, // back
-     8, 8, // front
-     8, 0, // top
-    16, 0, // bottom
-     0, 8, // left
-    16, 8],// right
-    8, 8)  // dimensions
+  setCubeFaceUV(0, 24, 8, 8, 8) // back
+  setCubeFaceUV(1,  8, 8, 8, 8) // front
+  setCubeFaceUV(2,  8, 0, 8, 8) // top
+  setCubeFaceUV(3, 16, 0, 8, 8) // bottom
+  setCubeFaceUV(4,  0, 8, 8, 8) // left // TODO: this has to be rotated?
+  setCubeFaceUV(5, 16, 8, 8, 8) // right
 
   uv = createBuffer(gl, uvArray)
 
