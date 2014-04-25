@@ -153,6 +153,12 @@ var view = new Float32Array(16)
 var proj = new Float32Array(16)
 var model = mat4.create()
 
+var headTransform = mat4.create()
+var bodyTransform = mat4.create()
+
+mat4.scale(bodyTransform, bodyTransform, [1.0, 1.5, 0.5])
+mat4.translate(bodyTransform, bodyTransform, [0, -1.5, 0]) // TODO: fix 1/8 overlap Y
+
 function draw() {
   gl.enable(gl.CULL_FACE)
   gl.enable(gl.DEPTH_TEST)
@@ -170,7 +176,7 @@ function draw() {
   shader.attributes.uv.location = 1
   shader.uniforms.projectionMatrix = proj
   shader.uniforms.viewMatrix = view
-  shader.uniforms.modelMatrix = model
+  shader.uniforms.modelMatrix = headTransform
   if (skin) shader.uniforms.skin = skin.bind()
   shader.attributes.position.pointer()
   shader.attributes.uv.pointer()
@@ -179,6 +185,11 @@ function draw() {
   // to the screen as triangles. The gl-vao module
   // will handle when to use gl.drawArrays/gl.drawElements
   // for you.
+  mesh.bind()
+  mesh.draw(gl.TRIANGLES, mesh.length)
+  mesh.unbind()
+
+  shader.uniforms.modelMatrix = bodyTransform
   mesh.bind()
   mesh.draw(gl.TRIANGLES, mesh.length)
   mesh.unbind()
