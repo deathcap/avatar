@@ -151,25 +151,26 @@ function init() {
 
 var view = new Float32Array(16)
 var proj = new Float32Array(16)
+var model = mat4.create()
 
 function draw() {
   gl.enable(gl.CULL_FACE)
   gl.enable(gl.DEPTH_TEST)
 
   camera.view(view)
-  mat4.perspective(proj
+  mat4.perspective(proj // TODO: shouldn't have to calculate this everytime (only if shell changes); add event
     , Math.PI / 4
     , shell.width / shell.height
     , 0.001
     , 1000
   )
 
-  mat4.mul(proj, proj, view)
-
   shader.bind()
   shader.attributes.position.location = 0
   shader.attributes.uv.location = 1
-  shader.uniforms.matrix = proj
+  shader.uniforms.projectionMatrix = proj
+  shader.uniforms.viewMatrix = view
+  shader.uniforms.modelMatrix = model
   if (skin) shader.uniforms.skin = skin.bind()
   shader.attributes.position.pointer()
   shader.attributes.uv.pointer()
