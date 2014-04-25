@@ -34,10 +34,8 @@ function init() {
   camera = createCamera(shell)
   camera.distance = 10
 
-  // Create the position buffer.
-  // see https://developer.mozilla.org/en-US/docs/Web/WebGL/Creating_3D_objects_using_WebGL
-  var vertices = createBuffer(gl
-    , new Float32Array([
+  // Cube coordinates, see https://developer.mozilla.org/en-US/docs/Web/WebGL/Creating_3D_objects_using_WebGL
+  var cube = new Float32Array([
     // Back face
     -0.5, -0.5,  0.5,
      0.5, -0.5,  0.5,
@@ -73,8 +71,16 @@ function init() {
     -0.5, -0.5,  0.5,
     -0.5,  0.5,  0.5,
     -0.5,  0.5, -0.5
-    ])
-  )
+  ])
+
+  var cubeCount = 2
+
+  var verticesArray = new Float32Array(cube.length * cubeCount)
+  for (var i = 0; i < cubeCount; ++i)
+    verticesArray.set(cube, cube.length * i)
+
+  // Create the position buffer.
+  var vertices = createBuffer(gl, verticesArray)
 
   var cubeVertexIndices = new Uint16Array([
     0,  1,  2,      0,  2,  3,    // back
@@ -85,18 +91,22 @@ function init() {
     20, 21, 22,     20, 22, 23    // right
   ])
 
+  var indexArray = new Uint16Array(cubeVertexIndices.length * cubeCount)
+  for (var i = 0; i < cubeCount; ++i)
+    indexArray.set(cubeVertexIndices, cubeVertexIndices.length * i)
+
   // Create the index buffer. This is instead packed into
   // a UInt16Array: note that this is important, otherwise
   // your model won't render correctly. Also important is
   // that you label this buffer as an ELEMENT_ARRAY_BUFFER,
   // or WebGL will hassle you and refuse to draw the VAO.
   var index = createBuffer(gl
-    , cubeVertexIndices
+    , indexArray
     , gl.ELEMENT_ARRAY_BUFFER
   )
 
 
-  var uvArray = new Float32Array(2 * 4 * 6)
+  var uvArray = new Float32Array(2 * 4 * 6 * cubeCount)
 
   var tw = 64, th = 32
   var setCubeFaceUV = function(face,x,y,w,h) {
@@ -139,7 +149,7 @@ function init() {
         , size: 2
       }
   ], index)
-  mesh.length = cubeVertexIndices.length
+  mesh.length = indexArray.length
 
   // This super-basic shader is loaded in using glslify, see
   // shader.frag and shader.vert.
