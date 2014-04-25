@@ -185,13 +185,13 @@ var generateMesh = function(gl) {
   setCubeFaceUV(4,  0, 8, 8, 8) // left // TODO: this has to be rotated?
   setCubeFaceUV(5, 16, 8, 8, 8) // right
 
-  // TODO: body
-  setCubeFaceUV(6, 24, 8, 8, 8) // back
-  setCubeFaceUV(7,  8, 8, 8, 8) // front
-  setCubeFaceUV(8,  8, 0, 8, 8) // top
-  setCubeFaceUV(9, 16, 0, 8, 8) // bottom
-  setCubeFaceUV(10, 0, 8, 8, 8) // left
-  setCubeFaceUV(11,16, 8, 8, 8) // right
+  // body
+  setCubeFaceUV(6,  32, 20,  8, 12) // back
+  setCubeFaceUV(7,  20, 20,  8, 12) // front
+  setCubeFaceUV(8,  20, 16,  8,  4) // top
+  setCubeFaceUV(9,  28, 16,  8,  4) // bottom
+  setCubeFaceUV(10, 16, 20,  4, 12) // left
+  setCubeFaceUV(11, 28, 20,  4, 12) // right
 
 
   var uv = createBuffer(gl, uvArray)
