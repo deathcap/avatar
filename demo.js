@@ -75,9 +75,15 @@ function init() {
 
   var cubeCount = 2
 
+  // add vetices for each cube
   var verticesArray = new Float32Array(cube.length * cubeCount)
   for (var i = 0; i < cubeCount; ++i)
     verticesArray.set(cube, cube.length * i)
+
+  // test moving over the 2nd cube as an example, to prove it exists
+  // TODO: real transformations, for each body part
+  for (var i = cube.length; i < cube.length * 2; ++i)
+    verticesArray[i] += 2.0
 
   // Create the position buffer.
   var vertices = createBuffer(gl, verticesArray)
@@ -91,9 +97,13 @@ function init() {
     20, 21, 22,     20, 22, 23    // right
   ])
 
+  // repeat vertex indices for each cube, offset by cube vertex count
   var indexArray = new Uint16Array(cubeVertexIndices.length * cubeCount)
-  for (var i = 0; i < cubeCount; ++i)
-    indexArray.set(cubeVertexIndices, cubeVertexIndices.length * i)
+  for (var i = 0; i < cubeCount; ++i) {
+    for (var j = 0; j < cubeVertexIndices.length; ++j) {
+      indexArray[i * cubeVertexIndices.length + j] = cubeVertexIndices[j] + (cube.length / 3) * i
+    }
+  }
 
   // Create the index buffer. This is instead packed into
   // a UInt16Array: note that this is important, otherwise
@@ -128,12 +138,22 @@ function init() {
     uvArray[i + 7] = (y + h) / th
   }
 
+  // head
   setCubeFaceUV(0, 24, 8, 8, 8) // back
   setCubeFaceUV(1,  8, 8, 8, 8) // front
   setCubeFaceUV(2,  8, 0, 8, 8) // top
   setCubeFaceUV(3, 16, 0, 8, 8) // bottom
   setCubeFaceUV(4,  0, 8, 8, 8) // left // TODO: this has to be rotated?
   setCubeFaceUV(5, 16, 8, 8, 8) // right
+
+  // TODO: body
+  setCubeFaceUV(6, 24, 8, 8, 8) // back
+  setCubeFaceUV(7,  8, 8, 8, 8) // front
+  setCubeFaceUV(8,  8, 0, 8, 8) // top
+  setCubeFaceUV(9, 16, 0, 8, 8) // bottom
+  setCubeFaceUV(10, 0, 8, 8, 8) // left
+  setCubeFaceUV(11,16, 8, 8, 8) // right
+
 
   uv = createBuffer(gl, uvArray)
 
@@ -166,6 +186,7 @@ var model = mat4.create()
 var headTransform = mat4.create()
 var bodyTransform = mat4.create()
 
+// TODO: move
 mat4.scale(bodyTransform, bodyTransform, [1.0, 1.5, 0.5])
 mat4.translate(bodyTransform, bodyTransform, [0, -1.0, 0]) // TODO: fix 1/8 offset Y
 
@@ -195,16 +216,6 @@ function draw() {
   // to the screen as triangles. The gl-vao module
   // will handle when to use gl.drawArrays/gl.drawElements
   // for you.
-  mesh.bind()
-  mesh.draw(gl.TRIANGLES, mesh.length)
-  mesh.unbind()
-var bodyTransform = mat4.create()
-
-mat4.scale(bodyTransform, bodyTransform, [1.0, 1.5, 0.5])
-mat4.translate(bodyTransform, bodyTransform, [0, -0.83, 0]) // TODO: why -0.83?
-
-
-  shader.uniforms.modelMatrix = bodyTransform
   mesh.bind()
   mesh.draw(gl.TRIANGLES, mesh.length)
   mesh.unbind()
