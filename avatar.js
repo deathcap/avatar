@@ -64,6 +64,22 @@ var applyTransformToVertices = function(vertices, matrix) {
 }
 
 var generateMesh = function(gl) {
+  var boxes = []
+
+  var headMatrix = mat4.create()
+
+  boxes.push({matrix: headMatrix})
+
+  var bodyMatrix = mat4.create()
+  mat4.scale(bodyMatrix, bodyMatrix, [1.0, 1.5, 0.5])
+  mat4.translate(bodyMatrix, bodyMatrix, [0, -1.0, 0]) // TODO: fix 1/8 offset Y
+
+  boxes.push({matrix: bodyMatrix})
+
+  return generateBoxesMesh(gl, boxes)
+}
+
+var generateBoxesMesh = function(gl, info) {
   // Cube coordinates, see https://developer.mozilla.org/en-US/docs/Web/WebGL/Creating_3D_objects_using_WebGL
   var cube = new Float32Array([
     // Back face
@@ -103,7 +119,7 @@ var generateMesh = function(gl) {
     -0.5,  0.5, -0.5
   ])
 
-  var cubeCount = 2
+  var cubeCount = info.length
 
   // add vetices for each cube
   var verticesArray = new Float32Array(cube.length * cubeCount)
@@ -111,15 +127,7 @@ var generateMesh = function(gl) {
     var thisCube = new Float32Array(cube.length)
     thisCube.set(cube)
 
-    if (i == 1) {
-      // test moving over the 2nd cube as an example, to prove it exists
-      // TODO: real transformations, for each body part
-      var matrix = mat4.create()
-      mat4.scale(matrix, matrix, [1.0, 1.5, 0.5])
-      mat4.translate(matrix, matrix, [0, -1.0, 0]) // TODO: fix 1/8 offset Y
-
-      applyTransformToVertices(thisCube, matrix)
-    }
+    applyTransformToVertices(thisCube, info[i].matrix)
 
     verticesArray.set(thisCube, cube.length * i)
   }
