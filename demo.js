@@ -19,9 +19,6 @@ var shell = createShell({
   clearColor: [0, 0, 0, 1]
 })
 
-shell.on('gl-init', init)
-shell.on('gl-render', draw)
-
 var applyTransformToVertices = function(vertices, matrix) {
   for (var i = 0; i < vertices.length / 3; ++i) {
     var vertex = vertices.subarray(i * 3, (i + 1) * 3)
@@ -30,7 +27,7 @@ var applyTransformToVertices = function(vertices, matrix) {
   }
 }
 
-function init() {
+var init = function() {
   gl = shell.gl
 
   getPixels('./viking.png', function(err, pixels) {
@@ -44,6 +41,18 @@ function init() {
   camera = createCamera(shell)
   camera.distance = 10
 
+  mesh = generateMesh()
+
+  // This super-basic shader is loaded in using glslify, see
+  // shader.frag and shader.vert.
+  shader = glslify({
+      vertex: './avatar.vert'
+    , fragment: './avatar.frag'
+  })(gl)
+
+}
+
+var generateMesh = function() {
   // Cube coordinates, see https://developer.mozilla.org/en-US/docs/Web/WebGL/Creating_3D_objects_using_WebGL
   var cube = new Float32Array([
     // Back face
@@ -95,7 +104,9 @@ function init() {
       // test moving over the 2nd cube as an example, to prove it exists
       // TODO: real transformations, for each body part
       var matrix = mat4.create()
-      mat4.translate(matrix, matrix, [2,2,2])
+      mat4.scale(matrix, matrix, [1.0, 1.5, 0.5])
+      mat4.translate(matrix, matrix, [0, -1.0, 0]) // TODO: fix 1/8 offset Y
+
       applyTransformToVertices(thisCube, matrix)
     }
 
@@ -188,12 +199,7 @@ function init() {
   ], index)
   mesh.length = indexArray.length
 
-  // This super-basic shader is loaded in using glslify, see
-  // shader.frag and shader.vert.
-  shader = glslify({
-      vertex: './avatar.vert'
-    , fragment: './avatar.frag'
-  })(gl)
+  return mesh
 }
 
 var view = new Float32Array(16)
@@ -201,13 +207,14 @@ var proj = new Float32Array(16)
 var model = mat4.create()
 
 var headTransform = mat4.create()
+/*
 var bodyTransform = mat4.create()
 
-// TODO: move
 mat4.scale(bodyTransform, bodyTransform, [1.0, 1.5, 0.5])
 mat4.translate(bodyTransform, bodyTransform, [0, -1.0, 0]) // TODO: fix 1/8 offset Y
+*/
 
-function draw() {
+var draw = function() {
   gl.enable(gl.CULL_FACE)
   gl.enable(gl.DEPTH_TEST)
 
@@ -237,3 +244,6 @@ function draw() {
   mesh.draw(gl.TRIANGLES, mesh.length)
   mesh.unbind()
 }
+
+shell.on('gl-init', init)
+shell.on('gl-render', draw)
