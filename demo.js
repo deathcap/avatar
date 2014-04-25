@@ -6,7 +6,9 @@ var createVAO    = require('gl-vao')
 var createTexture= require('gl-texture2d')
 var getPixels    = require('get-pixels')
 
-var mat4 = require('gl-matrix').mat4
+var glm          = require('gl-matrix')
+var mat4         = glm.mat4
+var vec3         = glm.vec3
 
 var shader
 var mesh
@@ -19,6 +21,14 @@ var shell = createShell({
 
 shell.on('gl-init', init)
 shell.on('gl-render', draw)
+
+var applyTransformToVertices = function(vertices, matrix) {
+  for (var i = 0; i < vertices.length / 3; ++i) {
+    var vertex = vertices.subarray(i * 3, (i + 1) * 3)
+
+    vec3.transformMat4(vertex, vertex, matrix)
+  }
+}
 
 function init() {
   gl = shell.gl
@@ -77,13 +87,20 @@ function init() {
 
   // add vetices for each cube
   var verticesArray = new Float32Array(cube.length * cubeCount)
-  for (var i = 0; i < cubeCount; ++i)
-    verticesArray.set(cube, cube.length * i)
+  for (var i = 0; i < cubeCount; ++i) {
+    var thisCube = new Float32Array(cube.length)
+    thisCube.set(cube)
 
-  // test moving over the 2nd cube as an example, to prove it exists
-  // TODO: real transformations, for each body part
-  for (var i = cube.length; i < cube.length * 2; ++i)
-    verticesArray[i] += 2.0
+    if (i == 1) {
+      // test moving over the 2nd cube as an example, to prove it exists
+      // TODO: real transformations, for each body part
+      var matrix = mat4.create()
+      mat4.translate(matrix, matrix, [2,2,2])
+      applyTransformToVertices(thisCube, matrix)
+    }
+
+    verticesArray.set(thisCube, cube.length * i)
+  }
 
   // Create the position buffer.
   var vertices = createBuffer(gl, verticesArray)
