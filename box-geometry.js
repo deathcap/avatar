@@ -8,8 +8,8 @@ var mat4         = glm.mat4
 var vec3         = glm.vec3
 
 var applyTransformToVertices = function(vertices, matrix) {
-  for (var i = 0; i < vertices.length / 3; i += 1) {
-    var vertex = vertices.subarray(i * 3, (i + 1) * 3)
+  for (var i = 0; i < vertices.length / 4; i += 1) {
+    var vertex = vertices.subarray(i * 4, (i + 1) * 4)
 
     vec3.transformMat4(vertex, vertex, matrix)
   }
@@ -19,40 +19,40 @@ var generateBoxesMesh = function(gl, info) {
   // Cube coordinates, see https://developer.mozilla.org/en-US/docs/Web/WebGL/Creating_3D_objects_using_WebGL
   var cube = new Float32Array([
     // Back face
-    -0.5, -0.5,  0.5,
-     0.5, -0.5,  0.5,
-     0.5,  0.5,  0.5,
-    -0.5,  0.5,  0.5,
+    -0.5, -0.5,  0.5, 1.0,
+     0.5, -0.5,  0.5, 1.0,
+     0.5,  0.5,  0.5, 1.0,
+    -0.5,  0.5,  0.5, 1.0,
 
     // Front face
-    -0.5, -0.5, -0.5,
-    -0.5,  0.5, -0.5,
-     0.5,  0.5, -0.5,
-     0.5, -0.5, -0.5,
+    -0.5, -0.5, -0.5, 1.0,
+    -0.5,  0.5, -0.5, 1.0,
+     0.5,  0.5, -0.5, 1.0,
+     0.5, -0.5, -0.5, 1.0,
 
     // Top face
-    -0.5,  0.5, -0.5,
-    -0.5,  0.5,  0.5,
-     0.5,  0.5,  0.5,
-     0.5,  0.5, -0.5,
+    -0.5,  0.5, -0.5, 1.0,
+    -0.5,  0.5,  0.5, 1.0,
+     0.5,  0.5,  0.5, 1.0,
+     0.5,  0.5, -0.5, 1.0,
 
     // Bottom face
-    -0.5, -0.5, -0.5,
-     0.5, -0.5, -0.5,
-     0.5, -0.5,  0.5,
-    -0.5, -0.5,  0.5,
+    -0.5, -0.5, -0.5, 1.0,
+     0.5, -0.5, -0.5, 1.0,
+     0.5, -0.5,  0.5, 1.0,
+    -0.5, -0.5,  0.5, 1.0,
 
     // Left face
-     0.5, -0.5, -0.5,
-     0.5,  0.5, -0.5,
-     0.5,  0.5,  0.5,
-     0.5, -0.5,  0.5,
+     0.5, -0.5, -0.5, 1.0,
+     0.5,  0.5, -0.5, 1.0,
+     0.5,  0.5,  0.5, 1.0,
+     0.5, -0.5,  0.5, 1.0,
 
     // Right face
-    -0.5, -0.5, -0.5,
-    -0.5, -0.5,  0.5,
-    -0.5,  0.5,  0.5,
-    -0.5,  0.5, -0.5
+    -0.5, -0.5, -0.5, 1.0,
+    -0.5, -0.5,  0.5, 1.0,
+    -0.5,  0.5,  0.5, 1.0,
+    -0.5,  0.5, -0.5, 1.0
   ])
 
   var cubeCount = info.length
@@ -84,7 +84,7 @@ var generateBoxesMesh = function(gl, info) {
   var indexArray = new Uint16Array(cubeVertexIndices.length * cubeCount)
   for (var i = 0; i < cubeCount; i += 1) {
     for (var j = 0; j < cubeVertexIndices.length; j += 1) {
-      indexArray[i * cubeVertexIndices.length + j] = cubeVertexIndices[j] + (cube.length / 3) * i
+      indexArray[i * cubeVertexIndices.length + j] = cubeVertexIndices[j] + (cube.length / 4) * i
     }
   }
 
@@ -140,7 +140,7 @@ var generateBoxesMesh = function(gl, info) {
   var mesh = createVAO(gl, [
       {
         buffer: vertices
-        , size: 3
+        , size: 4
       },
       {
         buffer: uv

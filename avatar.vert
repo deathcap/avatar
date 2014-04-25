@@ -1,4 +1,4 @@
-attribute vec3 position;
+attribute vec4 position;
 attribute vec2 uv;
 
 uniform mat4 projectionMatrix;
@@ -22,7 +22,7 @@ mat4 translate(int x, int y, int z) {
 }
 
 void main() {
-    gl_Position = projectionMatrix * viewMatrix * modelMatrix * vec4(position, 1.0);
+    gl_Position = projectionMatrix * viewMatrix * modelMatrix * position;
 
     vUv = uv;
 }
