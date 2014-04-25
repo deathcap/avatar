@@ -95,39 +95,8 @@ function init() {
     , gl.ELEMENT_ARRAY_BUFFER
   )
 
-  // TODO: set correct UV coordinates
-  var uvArray = new Float32Array([
-      // Back
-      0.0,  0.0,
-      1.0,  0.0,
-      1.0,  1.0,
-      0.0,  1.0,
-      // Front
-      0,0,
-      0,0,
-      0,0,
-      0,0,
-      // Top
-      0.0,  0.0,
-      1.0,  0.0,
-      1.0,  1.0,
-      0.0,  1.0,
-      // Bottom
-      0.0,  0.0,
-      1.0,  0.0,
-      1.0,  1.0,
-      0.0,  1.0,
-      // Left
-      0.0,  0.0,
-      1.0,  0.0,
-      1.0,  1.0,
-      0.0,  1.0,
-      // Right
-      0.0,  0.0,
-      1.0,  0.0,
-      1.0,  1.0,
-      0.0,  1.0
-      ])
+
+  var uvArray = new Float32Array(2 * 4 * 6)
 
   var tw = 64, th = 32
   var cubeFaceNameIndex = {
@@ -161,7 +130,6 @@ function init() {
     }
   }
 
-  //setCubeFaceUV(cubeFaceNameIndex.front, 8, 8)
   setCubeFacesUV([
     24, 8, // back
      8, 8, // front
