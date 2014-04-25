@@ -188,6 +188,11 @@ function draw() {
   mesh.bind()
   mesh.draw(gl.TRIANGLES, mesh.length)
   mesh.unbind()
+var bodyTransform = mat4.create()
+
+mat4.scale(bodyTransform, bodyTransform, [1.0, 1.5, 0.5])
+mat4.translate(bodyTransform, bodyTransform, [0, -0.83, 0]) // TODO: why -0.83?
+
 
   shader.uniforms.modelMatrix = bodyTransform
   mesh.bind()
