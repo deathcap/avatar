@@ -57,6 +57,11 @@ void main() {
         partMatrix *= translate(0.0, -1.25, 0.0);
         partMatrix *= scale(0.5, 1.5, 0.5);
         partMatrix *= translate(part == 2 ? -1.5 : +1.5, 0.0, 0.0);
+    } else if (part == 4 || part == 5) {
+        // legs
+        partMatrix *= translate(0.0, -2.75, 0.0);
+        partMatrix *= scale(0.5, 1.5, 0.5);
+        partMatrix *= translate(part == 4 ? -0.5 : 0.5, 0.0, 0.0);
     }
 
     gl_Position = projectionMatrix * viewMatrix * modelMatrix * partMatrix * vec4(position.xyz, 1.0);

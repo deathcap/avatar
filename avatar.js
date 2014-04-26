@@ -98,6 +98,26 @@ var generateMesh = function(gl) {
     44, 20,  4, 12
   ]})
 
+  // right leg
+  boxes.push({uv: [
+    12, 20,  4, 12,
+     4, 20,  4, 12,
+     8, 16,  4, 4,
+    12, 20,  4, 4,
+     0, 20,  4, 12,
+     8, 20,  4, 12
+  ]})
+
+  // left leg
+  boxes.push({uv: [
+    16, 20,  4, 12,
+     8, 20,  4, 12,
+     4, 16,  4,  4,
+     8, 20,  4,  4,
+    12, 20,  4, 12,
+     4, 20,  4, 12
+  ]})
+
 
   return generateBoxesMesh(gl, boxes)
 }
