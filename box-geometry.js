@@ -106,23 +106,25 @@ var generateBoxesMesh = function(gl, info) {
   var uvArray = new Float32Array(2 * 4 * 6 * cubeCount)
 
   var tw = 64, th = 32
-  var setCubeFaceUV = function(face,x,y,w,h) {
+  var setCubeFaceUV = function(face,x,y,w,h,r) {
     w = w || 8
     h = h || 8
 
+    r = r || 0
+
     var i = face * 8
 
-    uvArray[i    ] =  x      / tw
-    uvArray[i + 1] = (y + h) / th
+    uvArray[i + (0 + r) % 4 * 2 + 0] =  x      / tw
+    uvArray[i + (0 + r) % 4 * 2 + 1] = (y + h) / th
 
-    uvArray[i + 2] =  x      / tw
-    uvArray[i + 3] =  y      / th
+    uvArray[i + (1 + r) % 4 * 2 + 0] =  x      / tw
+    uvArray[i + (1 + r) % 4 * 2 + 1] =  y      / th
 
-    uvArray[i + 4] = (x + w) / tw
-    uvArray[i + 5] =  y      / th
+    uvArray[i + (2 + r) % 4 * 2 + 0] = (x + w) / tw
+    uvArray[i + (2 + r) % 4 * 2 + 1] =  y      / th
 
-    uvArray[i + 6] = (x + w) / tw
-    uvArray[i + 7] = (y + h) / th
+    uvArray[i + (3 + r) % 4 * 2 + 0] = (x + w) / tw
+    uvArray[i + (3 + r) % 4 * 2 + 1] = (y + h) / th
   }
 
   for (var i = 0; i < cubeCount; i += 1) {
