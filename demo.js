@@ -48,15 +48,6 @@ var init = function() {
 
 var view = new Float32Array(16)
 var proj = new Float32Array(16)
-var model = mat4.create()
-
-var headTransform = mat4.create()
-/*
-var bodyTransform = mat4.create()
-
-mat4.scale(bodyTransform, bodyTransform, [1.0, 1.5, 0.5])
-mat4.translate(bodyTransform, bodyTransform, [0, -1.0, 0]) // TODO: fix 1/8 offset Y
-*/
 
 var draw = function() {
   gl.enable(gl.CULL_FACE)
@@ -74,8 +65,7 @@ var draw = function() {
   shader.attributes.position.location = 0
   shader.attributes.uv.location = 1
   shader.uniforms.projectionMatrix = proj
-  shader.uniforms.viewMatrix = view
-  shader.uniforms.modelMatrix = headTransform
+  shader.uniforms.modelViewMatrix = view
   if (skin) shader.uniforms.skin = skin.bind()
   shader.attributes.position.pointer()
   shader.attributes.uv.pointer()

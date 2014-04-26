@@ -2,8 +2,7 @@ attribute vec4 position;
 attribute vec2 uv;
 
 uniform mat4 projectionMatrix;
-uniform mat4 viewMatrix;
-uniform mat4 modelMatrix;
+uniform mat4 modelViewMatrix;
 
 varying vec2 vUv;
 
@@ -64,7 +63,7 @@ void main() {
         partMatrix *= translate(part == 4 ? -0.5 : 0.5, 0.0, 0.0);
     }
 
-    gl_Position = projectionMatrix * viewMatrix * modelMatrix * partMatrix * vec4(position.xyz, 1.0);
+    gl_Position = projectionMatrix * modelViewMatrix * partMatrix * vec4(position.xyz, 1.0);
 
     vUv = uv;
 }
