@@ -59,12 +59,12 @@ var generateMesh = function(gl) {
   // head
   boxes.push({uv: [
     //u v  w  h, rot
-    24, 8, 8, 8, 0, // back
+    24, 8, 8, 8, 1, // back
      8, 8, 8, 8, 0, // front
      8, 0, 8, 8, 0, // top
     16, 0, 8, 8, 0, // bottom
-     0, 8, 8, 8, 0, // left // TODO: this has to be rotated?
-    16, 8, 8, 8, 0  // right
+     0, 8, 8, 8, 0, // left
+    16, 8, 8, 8, 1  // right
   ]})
 
   // body
