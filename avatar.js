@@ -57,8 +57,7 @@ var generateMesh = function(gl) {
   var boxes = []
 
   // head
-  var headMatrix = mat4.create()
-  boxes.push({matrix: headMatrix, uv: [
+  boxes.push({uv: [
     //u v  w  h
     24, 8, 8, 8,  // back
      8, 8, 8, 8,  // front
@@ -69,11 +68,7 @@ var generateMesh = function(gl) {
   ]})
 
   // body
-  var bodyMatrix = mat4.create()
-  mat4.scale(bodyMatrix, bodyMatrix, [1.0, 2.0, 0.5])
-  mat4.translate(bodyMatrix, bodyMatrix, [0, -1.0, 0]) // TODO: fix 1/8 offset Y
-
-  boxes.push({matrix: bodyMatrix, uv: [
+  boxes.push({uv: [
     32, 20,  8, 12,
     20, 20,  8, 12,
     20, 16,  8,  4,
@@ -83,16 +78,8 @@ var generateMesh = function(gl) {
   ]})
 
 
-  // arms
-  var armMatrix = mat4.create()
-  mat4.scale(armMatrix, armMatrix, [0.5, 2.0, 0.5])
-  //mat4.rotateY(armMatrix, armMatrix, 5*Math.PI/180) // TODO: rotate. via uniform?
-  var lArmMatrix = mat4.create()
-  var rArmMatrix = mat4.create()
-  mat4.translate(rArmMatrix, armMatrix, [-1.5, -1.0, 0])
-  mat4.translate(lArmMatrix, armMatrix, [+1.5, -1.0, 0])
-
-  boxes.push({matrix: rArmMatrix, uv: [
+  // right arm
+  boxes.push({uv: [
     56, 20,  4, 12,
     48, 20,  4, 12,
     48, 16,  4,  4,
@@ -101,7 +88,8 @@ var generateMesh = function(gl) {
     44, 20,  4, 12
   ]})
 
-  boxes.push({matrix: lArmMatrix, uv: [
+  // left arm
+  boxes.push({uv: [
     56, 20,  4, 12, // TODO: different UVs for 64x64
     48, 20,  4, 12,
     48, 16,  4,  4,

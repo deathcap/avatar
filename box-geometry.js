@@ -7,9 +7,12 @@ var glm          = require('gl-matrix')
 var mat4         = glm.mat4
 var vec3         = glm.vec3
 
-var applyTransformToVertices = function(vertices, matrix) {
+var applyTransformToVertices = function(vertices, matrix, w) {
   for (var i = 0; i < vertices.length / 4; i += 1) {
     var vertex = vertices.subarray(i * 4, (i + 1) * 4)
+
+    if (i !== undefined)
+      vertex[3] = w // pass body part index in w coordinate for avatar.vert
 
     vec3.transformMat4(vertex, vertex, matrix)
   }
@@ -63,7 +66,8 @@ var generateBoxesMesh = function(gl, info) {
     var thisCube = new Float32Array(cube.length)
     thisCube.set(cube)
 
-    applyTransformToVertices(thisCube, info[i].matrix)
+    var matrix = info[i].matrix || mat4.create()
+    applyTransformToVertices(thisCube, matrix, i)
 
     verticesArray.set(thisCube, cube.length * i)
   }
