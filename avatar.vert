@@ -29,11 +29,12 @@ void main() {
         // head
     } else if (part == 1) {
         // body
-        partMatrix *= scale(1.0, 2.0, 0.5) * translate(0.0, -1.0, 0.0);  // TODO: fix 1/8 offset Y
+        partMatrix *= translate(0.0, -1.5, 0.0) * scale(1.0, 2.0, 0.5);
     } else if (part == 2 || part == 3) {
         // arms
+        partMatrix *= translate(0.0, -1.5, 0.0);
         partMatrix *= scale(0.5, 2.0, 0.5);
-        partMatrix *= translate(part==2 ? -1.5 : +1.5, -1.0, 0.0);
+        partMatrix *= translate(part == 2 ? -1.5 : +1.5, 0.0, 0.0);
         // TODO: rotate. via uniform?
     }
 
