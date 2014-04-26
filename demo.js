@@ -42,7 +42,8 @@ var init = function() {
 var view = new Float32Array(16)
 var proj = new Float32Array(16)
 
-var draw = function() {
+var t = 0
+var render = function(dt) {
   gl.enable(gl.CULL_FACE)
   gl.enable(gl.DEPTH_TEST)
 
@@ -59,6 +60,9 @@ var draw = function() {
   shader.attributes.uv.location = 1
   shader.uniforms.projectionMatrix = proj
   shader.uniforms.modelViewMatrix = view
+  t += dt
+  t %= 100
+  shader.uniforms.armRotateX = Math.sin(t / 100)
   if (skin) shader.uniforms.skin = skin.bind()
   shader.attributes.position.pointer()
   shader.attributes.uv.pointer()
@@ -118,5 +122,5 @@ var enableDrop = function() {
 }
 
 shell.on('gl-init', init)
-shell.on('gl-render', draw)
+shell.on('gl-render', render)
 enableDrop()

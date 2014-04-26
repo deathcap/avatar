@@ -4,6 +4,8 @@ attribute vec2 uv;
 uniform mat4 projectionMatrix;
 uniform mat4 modelViewMatrix;
 
+uniform float armRotateX;
+
 varying vec2 vUv;
 
 mat4 scale(float x, float y, float z) {
@@ -52,7 +54,8 @@ void main() {
         partMatrix *= translate(0.0, -1.25, 0.0) * scale(1.0, 1.5, 0.5);
     } else if (part == 2 || part == 3) {
         // arms
-        partMatrix *= rotateX(radians(10.0)); // TODO: add uniform, also rotate outwards
+        partMatrix *= rotateX(armRotateX); // TODO: separate left/right arm rotations?
+        // TODO: also rotate outwards
         partMatrix *= translate(0.0, -1.25, 0.0);
         partMatrix *= scale(0.5, 1.5, 0.5);
         partMatrix *= translate(part == 2 ? -1.5 : +1.5, 0.0, 0.0);
