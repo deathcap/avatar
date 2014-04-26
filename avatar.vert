@@ -54,7 +54,8 @@ void main() {
         partMatrix *= translate(0.0, -1.25, 0.0) * scale(1.0, 1.5, 0.5);
     } else if (part == 2 || part == 3) {
         // arms
-        partMatrix *= rotateX(armRotateX); // TODO: separate left/right arm rotations?
+        partMatrix *= rotateX(armRotateX); // TODO: fix rotation axes, it detaches from the body
+        // TODO: separate left/right arm rotations?
         // TODO: also rotate outwards
         partMatrix *= translate(0.0, -1.25, 0.0);
         partMatrix *= scale(0.5, 1.5, 0.5);
