@@ -32,9 +32,9 @@ var coords = {
 var showUVs = function() {
   var uvs = {}
 
-  // overall size of skin texture TODO: support old 64x32 (clone left/right)
+  // overall size of skin texture TODO: support new 64x64 (overlay + separated left/right)
   var total_w = 64
-  var total_h = 64
+  var total_h = 32
 
   for (var name in coords) {
     var x = coords[name][0], y = coords[name][1], w = coords[name][2], h = coords[name][3]
