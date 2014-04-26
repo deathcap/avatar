@@ -1,14 +1,11 @@
 var createCamera = require('game-shell-orbit-camera')
-var createBuffer = require('gl-buffer')
 var glslify      = require('glslify')
 var createShell  = require('gl-now')
-var createVAO    = require('gl-vao')
 var createTexture= require('gl-texture2d')
 var getPixels    = require('get-pixels')
-
+var url4data     = require('url4data')
 var glm          = require('gl-matrix')
 var mat4         = glm.mat4
-var vec3         = glm.vec3
 
 var shader
 var mesh
@@ -75,5 +72,51 @@ var draw = function() {
   mesh.unbind()
 }
 
+var setSkinFromArrayBuffer = function(arrayBuffer, name, type) {
+  //var byteArray = new Uint8Array(arrayBuffer)
+
+  url4data(arrayBuffer, name, {type: type}, function(url) {
+    getPixels(url, function(err, pixels) {
+      if (err) throw err
+
+      skin = createTexture(gl, pixels)
+    })
+  })
+}
+
+var enableDrop = function() {
+  document.body.addEventListener('dragover', function(ev) {
+    ev.stopPropagation()
+    ev.preventDefault()
+  })
+
+  document.body.addEventListener('drop', function(mouseEvent) {
+    mouseEvent.stopPropagation()
+    mouseEvent.preventDefault()
+
+    console.log('drop',mouseEvent)
+
+    files = mouseEvent.target.files || mouseEvent.dataTransfer.files
+
+    console.log('Dropped',files)
+
+    for (var i = 0; i < files.length; i += 1) {
+      var file = files[i]
+      console.log('Reading dropped',file)
+
+      var reader = new FileReader()
+      reader.addEventListener('load', function(readEvent) {
+        if (readEvent.total !== readEvent.loaded) return // TODO: progress bar
+
+        var result = readEvent.currentTarget.result
+        console.log('result',result)
+        setSkinFromArrayBuffer(result, file.name, file.type || 'image/png')
+      })
+      reader.readAsArrayBuffer(file)
+    }
+  })
+}
+
 shell.on('gl-init', init)
 shell.on('gl-render', draw)
+enableDrop()
