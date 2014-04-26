@@ -43,6 +43,10 @@ mat4 rotateZ(float a) {
                 0.0, 0.0, 0.0, 0.1);
 }
 
+mat4 rotateXaround(float a, float x, float y, float z) {
+    return translate(x,y,z) * rotateX(a) * translate(-x,-y,-z);
+}
+
 void main() {
     mat4 partMatrix = mat4(1.0);
 
@@ -54,7 +58,8 @@ void main() {
         partMatrix *= translate(0.0, -1.25, 0.0) * scale(1.0, 1.5, 0.5);
     } else if (part == 2 || part == 3) {
         // arms
-        partMatrix *= rotateX(armRotateX); // TODO: fix rotation axes, it detaches from the body
+        partMatrix *= rotateXaround(armRotateX, 0.0, -0.50, 0.0);
+
         // TODO: separate left/right arm rotations?
         // TODO: also rotate outwards
         partMatrix *= translate(0.0, -1.25, 0.0);
@@ -62,6 +67,7 @@ void main() {
         partMatrix *= translate(part == 2 ? -1.5 : +1.5, 0.0, 0.0);
     } else if (part == 4 || part == 5) {
         // legs
+        // TODO: add leg rotateX for walking
         partMatrix *= translate(0.0, -2.75, 0.0);
         partMatrix *= scale(0.5, 1.5, 0.5);
         partMatrix *= translate(part == 4 ? -0.5 : 0.5, 0.0, 0.0);
