@@ -11,7 +11,7 @@ var applyTransformToVertices = function(vertices, matrix, w) {
   for (var i = 0; i < vertices.length / 4; i += 1) {
     var vertex = vertices.subarray(i * 4, (i + 1) * 4)
 
-    if (i !== undefined)
+    if (w !== undefined)
       vertex[3] = w // pass body part index in w coordinate for avatar.vert
 
     vec3.transformMat4(vertex, vertex, matrix)
@@ -72,7 +72,6 @@ var generateBoxesMesh = function(gl, info) {
     verticesArray.set(thisCube, cube.length * i)
   }
 
-  // Create the position buffer.
   var vertices = createBuffer(gl, verticesArray)
 
   var cubeVertexIndices = new Uint16Array([
@@ -92,17 +91,13 @@ var generateBoxesMesh = function(gl, info) {
     }
   }
 
-  // Create the index buffer. This is instead packed into
-  // a UInt16Array: note that this is important, otherwise
-  // your model won't render correctly. Also important is
-  // that you label this buffer as an ELEMENT_ARRAY_BUFFER,
-  // or WebGL will hassle you and refuse to draw the VAO.
   var index = createBuffer(gl
     , indexArray
     , gl.ELEMENT_ARRAY_BUFFER
   )
 
 
+  // set UV coordinates for textures
   var uvArray = new Float32Array(2 * 4 * 6 * cubeCount)
 
   var tw = 64, th = 32
@@ -142,7 +137,7 @@ var generateBoxesMesh = function(gl, info) {
 
   var uv = createBuffer(gl, uvArray)
 
-  // Create a VAO from the position buffer, indexed by the
+  // Create a VAO from the vertices and uv buffers, indexed by the
   // index buffer.
   var mesh = createVAO(gl, [
       {

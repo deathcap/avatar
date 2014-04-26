@@ -30,18 +30,14 @@ var init = function() {
     skin = createTexture(gl, pixels)
   })
 
-  // create the camera and adjust its
-  // position to roughly center on the bunny
   camera = createCamera(shell)
   camera.distance = 10
 
   mesh = generateMesh(gl)
 
-  // This super-basic shader is loaded in using glslify, see
-  // shader.frag and shader.vert.
   shader = glslify({
-      vertex: './avatar.vert'
-    , fragment: './avatar.frag'
+      vertex: './avatar.vert'     // includes matrix transforms
+    , fragment: './avatar.frag'   // applies texture
   })(gl)
 
 }
@@ -54,7 +50,7 @@ var draw = function() {
   gl.enable(gl.DEPTH_TEST)
 
   camera.view(view)
-  mat4.perspective(proj // TODO: shouldn't have to calculate this everytime (only if shell changes); add event
+  mat4.perspective(proj // note: shouldn't have to calculate this everytime (only if shell changes; add event), but this is only a demo
     , Math.PI / 4
     , shell.width / shell.height
     , 0.001
