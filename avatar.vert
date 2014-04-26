@@ -21,6 +21,27 @@ mat4 translate(float x, float y, float z) {
                   x,   y,   z, 1.0);
 }
 
+mat4 rotateX(float a) {
+    return mat4(1.0, 0.0, 0.0, 0.0,
+                0.0, cos(a), sin(a), 0.0,
+                0.0, -sin(a), cos(a), 0.0,
+                0.0, 0.0, 0.0, 1.0);
+}
+
+mat4 rotateY(float a) {
+    return mat4(cos(a), 0.0, -sin(a), 0.0,
+                0.0, 1.0, 0.0, 0.0,
+                sin(a), 0.0, cos(a), 0.0,
+                0.0, 0.0, 0.0, 1.0);
+}
+
+mat4 rotateZ(float a) {
+    return mat4(cos(a), sin(a), 0.0, 0.0,
+                -sin(a), cos(a), 0.0, 0.0,
+                0.0, 0.0, 1.0, 0.0,
+                0.0, 0.0, 0.0, 0.1);
+}
+
 void main() {
     mat4 partMatrix = mat4(1.0);
 
@@ -32,10 +53,10 @@ void main() {
         partMatrix *= translate(0.0, -1.5, 0.0) * scale(1.0, 2.0, 0.5);
     } else if (part == 2 || part == 3) {
         // arms
+        partMatrix *= rotateX(radians(10.0)); // TODO: add uniform, also rotate outwards
         partMatrix *= translate(0.0, -1.5, 0.0);
         partMatrix *= scale(0.5, 2.0, 0.5);
         partMatrix *= translate(part == 2 ? -1.5 : +1.5, 0.0, 0.0);
-        // TODO: rotate. via uniform?
     }
 
     gl_Position = projectionMatrix * viewMatrix * modelMatrix * partMatrix * vec4(position.xyz, 1.0);
