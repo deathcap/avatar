@@ -50,12 +50,12 @@ void main() {
         // head
     } else if (part == 1) {
         // body
-        partMatrix *= translate(0.0, -1.5, 0.0) * scale(1.0, 2.0, 0.5);
+        partMatrix *= translate(0.0, -1.25, 0.0) * scale(1.0, 1.5, 0.5);
     } else if (part == 2 || part == 3) {
         // arms
         partMatrix *= rotateX(radians(10.0)); // TODO: add uniform, also rotate outwards
-        partMatrix *= translate(0.0, -1.5, 0.0);
-        partMatrix *= scale(0.5, 2.0, 0.5);
+        partMatrix *= translate(0.0, -1.25, 0.0);
+        partMatrix *= scale(0.5, 1.5, 0.5);
         partMatrix *= translate(part == 2 ? -1.5 : +1.5, 0.0, 0.0);
     }
 
