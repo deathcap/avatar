@@ -62,7 +62,11 @@ var render = function(dt) {
   shader.uniforms.modelViewMatrix = view
   t += dt
   t %= 100
-  shader.uniforms.armRotateX = Math.sin(t / 100 * 2 * Math.PI)
+  shader.uniforms.lArmRotateX = Math.sin(t / 100 * 2 * Math.PI)
+  shader.uniforms.rArmRotateX = Math.sin(t / 100 * 2 * Math.PI)
+  shader.uniforms.rLegRotateX = Math.sin(2 * t / 100 * 2 * Math.PI)
+  shader.uniforms.lLegRotateX = Math.cos(2 * t / 100 * 2 * Math.PI)
+
   if (skin) shader.uniforms.skin = skin.bind()
   shader.attributes.position.pointer()
   shader.attributes.uv.pointer()

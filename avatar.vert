@@ -4,7 +4,10 @@ attribute vec2 uv;
 uniform mat4 projectionMatrix;
 uniform mat4 modelViewMatrix;
 
-uniform float armRotateX;
+uniform float rArmRotateX;
+uniform float lArmRotateX;
+uniform float rLegRotateX;
+uniform float lLegRotateX;
 
 varying vec2 vUv;
 
@@ -58,7 +61,7 @@ void main() {
         partMatrix *= translate(0.0, -1.25, 0.0) * scale(1.0, 1.5, 0.5);
     } else if (part == 2 || part == 3) {
         // arms
-        partMatrix *= rotateXaround(armRotateX, 0.0, -0.50, 0.0);
+        partMatrix *= rotateXaround(part == 2 ? lArmRotateX : rArmRotateX, 0.0, -0.50, 0.0);
 
         // TODO: separate left/right arm rotations?
         // TODO: also rotate outwards
@@ -67,7 +70,8 @@ void main() {
         partMatrix *= translate(part == 2 ? -1.5 : +1.5, 0.0, 0.0);
     } else if (part == 4 || part == 5) {
         // legs
-        // TODO: add leg rotateX for walking
+        partMatrix *= rotateXaround(part == 4 ? rLegRotateX : lLegRotateX, 0.0, -2.00, 0.0);
+
         partMatrix *= translate(0.0, -2.75, 0.0);
         partMatrix *= scale(0.5, 1.5, 0.5);
         partMatrix *= translate(part == 4 ? -0.5 : 0.5, 0.0, 0.0);
