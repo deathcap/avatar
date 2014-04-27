@@ -21,7 +21,7 @@ var generateMesh = require('./avatar.js')
 var init = function() {
   gl = shell.gl
 
-  getPixels('./viking.png', function(err, pixels) {
+  getPixels('./substack.png', function(err, pixels) {
     if (err) throw err
 
     skin = createTexture(gl, pixels)
