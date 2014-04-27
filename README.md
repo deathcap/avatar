@@ -10,12 +10,26 @@ Returns a [gl-vao](https://github.com/gl-modules/gl-vao) object
 containing the vertices and UV coordinates for the player model,
 for use with the provided vertex and fragment shaders.
 
+For an example, run `npm start` or check out the **[live demo](http://deathcap.github.io/avatar)**.
+*Try dragging a skin image file from your hard disk onto the demo to change the textures.*
+
+The included example uses @substack's skin:
+
+![screenshot](substack.png "example skin")
+
+Here's how the avatar looks when using changing it to ![screenshot](http://i.imgur.com/Y9V55g1.png "maxogden.png"), @maxogden skin:
+
+![screenshot](http://i.imgur.com/Nq2hD4S.png "maxogden avatar")
+
+Or the classic "[Steve](http://minecraft.gamepedia.com/Skin)" skin from Minecraft (not included):
+
+![screenshot](http://i.imgur.com/eATTezf.png "steve avatar")
+
 ## Skin formats
 
 Currently supported:
 
-* Minecraft 1.7 and earlier (64x32) skin format. Included substack.png as an example:
-![screenshot](substack.png "example skin")
+* Minecraft 1.7 and earlier (64x32) skin format.
 
 (Minecraft is property of Mojang Specifications).
 
