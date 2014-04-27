@@ -18,7 +18,8 @@
     "gl-buffer": "^2.0.6",
     "glslify": "^1.2.1",
     "gl-texture2d": "^1.0.1",
-    "get-pixels": "^1.1.0"
+    "get-pixels": "^1.1.0",
+    "asarray": "^0.1.0"
   },
   "scripts": {
     "start": "beefy demo.js"

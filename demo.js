@@ -4,6 +4,7 @@ var createShell  = require('gl-now')
 var createTexture= require('gl-texture2d')
 var getPixels    = require('get-pixels')
 var url4data     = require('url4data')
+var asarray      = require('asarray')
 var glm          = require('gl-matrix')
 var mat4         = glm.mat4
 
@@ -108,8 +109,7 @@ var enableDrop = function() {
 
     console.log('Dropped',files)
 
-    for (var i = 0; i < files.length; i += 1) {
-      var file = files[i]
+    asarray(files).forEach(function(file) {
       console.log('Reading dropped',file)
 
       var reader = new FileReader()
@@ -121,7 +121,7 @@ var enableDrop = function() {
         setSkinFromArrayBuffer(result, file.name, file.type || 'image/png')
       })
       reader.readAsArrayBuffer(file)
-    }
+    })
   })
 }
 
