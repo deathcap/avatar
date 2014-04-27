@@ -18,6 +18,8 @@ var applyTransformToVertices = function(vertices, matrix, w) {
   }
 }
 
+var identity = mat4.create()
+
 var generateBoxesMesh = function(gl, info) {
   // Cube coordinates, see https://developer.mozilla.org/en-US/docs/Web/WebGL/Creating_3D_objects_using_WebGL
   var cube = new Float32Array([
@@ -66,8 +68,7 @@ var generateBoxesMesh = function(gl, info) {
     var thisCube = new Float32Array(cube.length)
     thisCube.set(cube)
 
-    var matrix = info[i].matrix || mat4.create()
-    applyTransformToVertices(thisCube, matrix, i)
+    applyTransformToVertices(thisCube, info[i].matrix || identity, i)
 
     verticesArray.set(thisCube, cube.length * i)
   }

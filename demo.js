@@ -17,7 +17,7 @@ var shell = createShell({
   clearColor: [0, 0, 0, 1]
 })
 
-var generateMesh = require('./avatar.js')
+var generateSkinMesh = require('./avatar.js')
 
 var init = function() {
   gl = shell.gl
@@ -31,7 +31,7 @@ var init = function() {
   camera = createCamera(shell)
   camera.distance = 10
 
-  mesh = generateMesh(gl)
+  mesh = generateSkinMesh(gl)
 
   shader = glslify({
       vertex: './avatar.vert'     // includes matrix transforms
@@ -82,11 +82,12 @@ var render = function(dt) {
 }
 
 var setSkinFromArrayBuffer = function(arrayBuffer, name, type) {
-  //var byteArray = new Uint8Array(arrayBuffer)
-
   url4data(arrayBuffer, name, {type: type}, function(url) {
     getPixels(url, function(err, pixels) {
-      if (err) throw err
+      if (err) {
+        console.log('Error reading texture',name,': ',err)
+        return
+      }
 
       skin = createTexture(gl, pixels)
     })
