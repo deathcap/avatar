@@ -1,6 +1,6 @@
 {
   "name": "avatar",
-  "description": "",
+  "description": "skinned avatar player model for voxel games",
   "version": "0.0.1",
   "main": "avatar.js",
   "repository": {
@@ -8,7 +8,9 @@
     "url": "git@github.com:deathcap/avatar.git"
   },
   "keywords": [
-    "voxel"
+    "voxel",
+    "avatar",
+    "skin"
   ],
   "dependencies": {
     "gl-vao": "^1.1.2",

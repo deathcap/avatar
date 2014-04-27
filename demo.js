@@ -62,8 +62,8 @@ var render = function(dt) {
   shader.uniforms.modelViewMatrix = view
   t += dt
   t %= 100
-  shader.uniforms.lArmRotateX = Math.sin(t / 100 * 2 * Math.PI)
   shader.uniforms.rArmRotateX = Math.sin(t / 100 * 2 * Math.PI)
+  shader.uniforms.lArmRotateX = Math.sin(t / 100 * 2 * Math.PI)
   shader.uniforms.rLegRotateX = Math.sin(2 * t / 100 * 2 * Math.PI)
   shader.uniforms.lLegRotateX = Math.cos(2 * t / 100 * 2 * Math.PI)
 
