@@ -10,6 +10,9 @@ Returns a [gl-vao](https://github.com/gl-modules/gl-vao) object
 containing the vertices and UV coordinates for the player model,
 for use with the provided vertex and fragment shaders.
 
+For an example, run `npm start` or check out the [live demo](http://deathcap.github.io/avatar).
+Try dragging your skin image file from your hard disk onto the demo to change the textures.
+
 ## Skin formats
 
 Currently supported:
