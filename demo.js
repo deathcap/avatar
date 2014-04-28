@@ -5,8 +5,10 @@ var createTexture= require('gl-texture2d')
 var getPixels    = require('get-pixels')
 var url4data     = require('url4data')
 var asarray      = require('asarray')
+var ndarray      = require('ndarray')
 var glm          = require('gl-matrix')
 var mat4         = glm.mat4
+var fs           = require('fs')
 
 var shader
 var mesh
@@ -22,11 +24,7 @@ var generateSkinMesh = require('./avatar.js')
 var init = function() {
   gl = shell.gl
 
-  getPixels('./substack.png', function(err, pixels) {
-    if (err) throw err
-
-    skin = createTexture(gl, pixels)
-  })
+  setSkinFromArrayBuffer(fs.readFileSync('./substack.png'), 'substack.png', 'image/png')
 
   camera = createCamera(shell)
   camera.distance = 10
@@ -81,6 +79,7 @@ var render = function(dt) {
   mesh.unbind()
 }
 
+// TODO: move into main module, this code is moving beyond demo territory
 var setSkinFromArrayBuffer = function(arrayBuffer, name, type) {
   url4data(arrayBuffer, name, {type: type}, function(url) {
     getPixels(url, function(err, pixels) {
@@ -89,7 +88,35 @@ var setSkinFromArrayBuffer = function(arrayBuffer, name, type) {
         return
       }
 
-      skin = createTexture(gl, pixels)
+      var newPixels
+      var height = pixels.shape[0], width = pixels.shape[1], channels = pixels.shape[2]
+      var ratio = width / height
+      if (ratio === 2) {
+        // 64x32 pre-1.8 format, need to convert to 64x64
+        newPixels = ndarray(new pixels.data.constructor(2 * height * width * channels),
+          [2 * height, width, channels])
+
+        // copy top half TODO: a 'bitblt' ndarray module would be nice
+        for (var i = 0; i < height; i += 1) {
+          for (var j = 0; j < width; j += 1) {
+            for (var k = 0; k < channels; k += 1) {
+              newPixels.set(i,j,k,pixels.get(i,j,k))
+            }
+          }
+        }
+        // TODO: mirror bottom left legs, left arm - then update UVs
+        // in avatar.js to use them for the left meshes. https://github.com/deathcap/avatar/issues/8
+
+      } else if (ratio === 1) {
+        // 64x64 format, can load as-is
+        newPixels = pixels
+      } else {
+        // not a valid shape (nor high-res multiple like 128x64 for 64x32, or 128x128 for 64x64),
+        // but try to load it anyways, what's the worst that could happen?
+        newPixels = pixels
+      }
+
+      skin = createTexture(gl, newPixels)
     })
   })
 }

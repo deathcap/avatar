@@ -19,13 +19,16 @@
     "glslify": "^1.2.1",
     "gl-texture2d": "^1.0.1",
     "get-pixels": "^1.1.0",
-    "asarray": "^0.1.0"
+    "asarray": "^0.1.0",
+    "ndarray": "^1.0.13",
+    "brfs": "^1.1.1"
   },
   "scripts": {
     "start": "beefy demo.js"
   },
   "browserify": {
     "transform": [
+      "brfs",
       "glslify"
     ]
   },
