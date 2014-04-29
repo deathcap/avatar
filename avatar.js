@@ -89,12 +89,26 @@ var copyPixels = function(dst, src, sx, sy, w, h, dx, dy) {
   var channels = dst.shape[2]
   if (channels != src.shape[2]) throw new Error('copyPixels mismatched channels, '+dst.shape[2]+' != '+src.shape[2])
 
-  for (var i = sy; i < sy+h; i += 1) {
-    for (var j = sx; j < sx+w; j += 1) {
-      for (var k = 0; k < channels; k += 1) {
-        dst.set(i+dy-sy,j+dx-sx,k,src.get(i,j,k))
+  if (h > 0 && w > 0) {
+    // copy normal
+    for (var i = sy; i < sy+h; i += 1) {
+      for (var j = sx; j < sx+w; j += 1) {
+        for (var k = 0; k < channels; k += 1) {
+          dst.set(i+dy-sy,j+dx-sx,k,src.get(i,j,k))
+        }
       }
     }
+  } else if (h < 0 && w < 0) {
+    // copy backwards
+    for (var i = sy; i >= sy+h; i -= 1) {
+      for (var j = sx; j >= sx+w; j -= 1) {
+        for (var k = 0; k < channels; k += 1) {
+          dst.set(i+dy-sy,j+dx-sx,k,src.get(i,j,k))
+        }
+      }
+    }
+  } else {
+    throw new Error('copyPixels w and h must both be + or -, not '+w+' and '+h)
   }
 }
 
@@ -119,13 +133,14 @@ var createSkinTexture = function(gl, arrayBuffer, name, type, cb) {
         copyPixels(newPixels, pixels, 0,0, width,height, 0,0)
 
         var s = width / 64 // scale to support high-res skins, multiple of 64x32
-        copyPixels(newPixels, pixels,  0*s,16*s, 16*s,16*s, 16*s,48*s) // right leg -> left leg TODO: mirror
-        copyPixels(newPixels, pixels, 40*s,16*s, 16*s,16*s, 32*s,48*s) // right arm -> left arm
+        copyPixels(newPixels, pixels,  0*s,16*s, 16*s,16*s, 16*s,48*s) // right leg -> left leg
+        //copyPixels(newPixels, pixels, 40*s,16*s, 16*s,16*s, 32*s,48*s) // right arm -> left arm TODO: mirror
+        copyPixels(newPixels, pixels, 56*s,32*s, -16*s,-16*s, 48*s,64*s) // right arm -> left arm TODO: mirror
 
         // in avatar.js to use them for the left meshes. https://github.com/deathcap/avatar/issues/8
 
         //window.open(require('save-pixels')(newPixels, 'canvas').toDataURL()) // debug
-        //document.write('<img border=1 width=512 height=512 src='+(require('save-pixels')(newPixels, 'canvas').toDataURL())+'>')
+        document.write('<img border=1 width=512 height=512 src='+(require('save-pixels')(newPixels, 'canvas').toDataURL())+'>')
       } else if (ratio === 1) {
         // 64x64 format, can load as-is
         newPixels = pixels
