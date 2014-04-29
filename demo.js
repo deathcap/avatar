@@ -12,7 +12,7 @@ var gl
 var skin
 var uv
 var shell = createShell({
-  clearColor: [0, 0, 0, 1]
+  clearColor: [0.75, 0.8, 0.9, 1.0]
 })
 
 var avatarModule = require('./avatar.js')
