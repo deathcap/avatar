@@ -104,7 +104,7 @@ var copyPixelsFlipX = function(dst, src, sx, sy, w, h, dx, dy) {
   for (var i = 0; i < h; i += 1) {
     for (var j = 0; j < w; j += 1) {
       for (var k = 0; k < channels; k += 1) {
-        dst.set(i+dy,j+dx,k,src.get(i+sy,(w-j)+sx,k))
+        dst.set(i+dy,j+dx,k,src.get(i+sy,w-j-1+sx,k))
       }
     }
   }
@@ -131,16 +131,18 @@ var createSkinTexture = function(gl, arrayBuffer, name, type, cb) {
         copyPixels(newPixels, pixels, 0,0, width,height, 0,0)
 
         var s = width / 64 // scale to support high-res skins, multiple of 64x32
-        copyPixels(newPixels, pixels,  0*s,16*s, 16*s,16*s, 16*s,48*s) // right leg -> left leg
-        //copyPixels(newPixels, pixels, 40*s,16*s, 16*s,16*s, 32*s,48*s) // right arm -> left arm TODO: mirror
-        //copyPixels(newPixels, pixels, 56*s,32*s, -16*s,-16*s, 48*s,64*s) // right arm -> left arm TODO: mirror
-        copyPixelsFlipX(newPixels, pixels, 40*s,16*s, 16*s,16*s, 32*s,48*s)
-
-
-        // in avatar.js to use them for the left meshes. https://github.com/deathcap/avatar/issues/8
+        // copy right leg -> left leg
+        copyPixels(newPixels, pixels,  0*s,16*s, 16*s,16*s, 16*s,48*s)
+        // copy right arm -> left arm, but mirror the individual cube faces
+        copyPixelsFlipX(newPixels, pixels, 44*s,16*s, 4*s, 4*s, 36*s,48*s)  // top
+        copyPixelsFlipX(newPixels, pixels, 48*s,16*s, 4*s, 4*s, 40*s,48*s)  // bottom
+        copyPixelsFlipX(newPixels, pixels, 40*s,20*s, 4*s,12*s, 40*s,52*s)  // left -> right
+        copyPixelsFlipX(newPixels, pixels, 44*s,20*s, 4*s,12*s, 36*s,52*s)  // front
+        copyPixelsFlipX(newPixels, pixels, 48*s,20*s, 4*s,12*s, 32*s,52*s)  // right -> left
+        copyPixelsFlipX(newPixels, pixels, 52*s,20*s, 4*s,12*s, 44*s,52*s)  // back
 
         //window.open(require('save-pixels')(newPixels, 'canvas').toDataURL()) // debug
-        document.write('<img border=1 width=512 height=512 src='+(require('save-pixels')(newPixels, 'canvas').toDataURL())+'>')
+        //document.write('<img border=1 width=512 height=512 src='+(require('save-pixels')(newPixels, 'canvas').toDataURL())+'>')
       } else if (ratio === 1) {
         // 64x64 format, can load as-is
         newPixels = pixels
