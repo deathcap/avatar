@@ -105,6 +105,21 @@ var coords = {
 }
 */
 
+// copy (sx,sy) wxh to (dx,dy)
+// TODO: ndarray bitblt module?
+var copyPixels = function(dst, src, sx, sy, w, h, dx, dy) {
+  var channels = dst.shape[2]
+  if (channels != src.shape[2]) throw new Error('copyPixels mismatched channels, '+dst.shape[2]+' != '+src.shape[2])
+
+  for (var i = sy; i < h; i += 1) {
+    for (var j = sx; j < w; j += 1) {
+      for (var k = 0; k < channels; k += 1) {
+        dst.set(i+dy,j+dx,k,src.get(i,j,k))
+      }
+    }
+  }
+}
+
 // get a gl-texture2d for the skin from an ArrayBuffer
 var createSkinTexture = function(gl, arrayBuffer, name, type, cb) {
   url4data(arrayBuffer, name, {type: type}, function(url) {
@@ -122,17 +137,13 @@ var createSkinTexture = function(gl, arrayBuffer, name, type, cb) {
         newPixels = ndarray(new pixels.data.constructor(2 * height * width * channels),
           [2 * height, width, channels])
 
-        // copy top half TODO: a 'bitblt' ndarray module would be nice
-        for (var i = 0; i < height; i += 1) {
-          for (var j = 0; j < width; j += 1) {
-            for (var k = 0; k < channels; k += 1) {
-              newPixels.set(i,j,k,pixels.get(i,j,k))
-            }
-          }
-        }
+        // copy top half
+        copyPixels(newPixels, pixels, 0, 0, width, height, 0, 0)
+
         // TODO: mirror bottom left legs, left arm - then update UVs
         // in avatar.js to use them for the left meshes. https://github.com/deathcap/avatar/issues/8
 
+        //window.open(require('save-pixels')(newPixels, 'canvas').toDataURL()) // debug
       } else if (ratio === 1) {
         // 64x64 format, can load as-is
         newPixels = pixels
