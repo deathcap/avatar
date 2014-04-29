@@ -118,10 +118,9 @@ var createSkinTexture = function(gl, arrayBuffer, name, type, cb) {
         // copy top half
         copyPixels(newPixels, pixels, 0,0, width,height, 0,0)
 
-        // TODO: use proportions, to support high-res
-
-        copyPixels(newPixels, pixels,  0,16, 16,16, 16,48) // right leg -> left leg TODO: mirror
-        copyPixels(newPixels, pixels, 40,16, 16,16, 32,48) // right arm -> left arm
+        var s = width / 64 // scale to support high-res skins, multiple of 64x32
+        copyPixels(newPixels, pixels,  0*s,16*s, 16*s,16*s, 16*s,48*s) // right leg -> left leg TODO: mirror
+        copyPixels(newPixels, pixels, 40*s,16*s, 16*s,16*s, 32*s,48*s) // right arm -> left arm
 
         // in avatar.js to use them for the left meshes. https://github.com/deathcap/avatar/issues/8
 
