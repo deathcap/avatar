@@ -18,6 +18,11 @@ var applyTransformToVertices = function(vertices, matrix, w) {
   }
 }
 
+var identity = mat4.create()
+
+// TODO: split out into an independent non-avatar module, as this is
+// mostly generic except for 1) use of w coord for index, 2) uv divisors
+
 var generateBoxesMesh = function(gl, info) {
   // Cube coordinates, see https://developer.mozilla.org/en-US/docs/Web/WebGL/Creating_3D_objects_using_WebGL
   var cube = new Float32Array([
@@ -66,8 +71,7 @@ var generateBoxesMesh = function(gl, info) {
     var thisCube = new Float32Array(cube.length)
     thisCube.set(cube)
 
-    var matrix = info[i].matrix || mat4.create()
-    applyTransformToVertices(thisCube, matrix, i)
+    applyTransformToVertices(thisCube, info[i].matrix || identity, i)
 
     verticesArray.set(thisCube, cube.length * i)
   }
@@ -100,7 +104,7 @@ var generateBoxesMesh = function(gl, info) {
   // set UV coordinates for textures
   var uvArray = new Float32Array(2 * 4 * 6 * cubeCount)
 
-  var tw = 64, th = 32
+  var tw = 64, th = 64
   var setCubeFaceUV = function(face,x,y,w,h,r) {
     w = w || 8
     h = h || 8

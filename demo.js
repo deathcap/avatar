@@ -1,11 +1,10 @@
 var createCamera = require('game-shell-orbit-camera')
 var glslify      = require('glslify')
 var createShell  = require('gl-now')
-var createTexture= require('gl-texture2d')
-var getPixels    = require('get-pixels')
-var url4data     = require('url4data')
+var asarray      = require('asarray')
 var glm          = require('gl-matrix')
 var mat4         = glm.mat4
+var fs           = require('fs')
 
 var shader
 var mesh
@@ -13,24 +12,24 @@ var gl
 var skin
 var uv
 var shell = createShell({
-  clearColor: [0, 0, 0, 1]
+  clearColor: [0.75, 0.8, 0.9, 1.0]
 })
 
-var generateMesh = require('./avatar.js')
+var avatarModule = require('./avatar.js')
+var createSkinMesh = avatarModule.createSkinMesh
+var createSkinTexture = avatarModule.createSkinTexture
 
 var init = function() {
   gl = shell.gl
 
-  getPixels('./substack.png', function(err, pixels) {
-    if (err) throw err
-
-    skin = createTexture(gl, pixels)
+  createSkinTexture(gl, fs.readFileSync('./substack.png'), 'substack.png', 'image/png', function(err, texture) {
+    skin = texture
   })
 
   camera = createCamera(shell)
   camera.distance = 10
 
-  mesh = generateMesh(gl)
+  mesh = createSkinMesh(gl)
 
   shader = glslify({
       vertex: './avatar.vert'     // includes matrix transforms
@@ -80,17 +79,6 @@ var render = function(dt) {
   mesh.unbind()
 }
 
-var setSkinFromArrayBuffer = function(arrayBuffer, name, type) {
-  //var byteArray = new Uint8Array(arrayBuffer)
-
-  url4data(arrayBuffer, name, {type: type}, function(url) {
-    getPixels(url, function(err, pixels) {
-      if (err) throw err
-
-      skin = createTexture(gl, pixels)
-    })
-  })
-}
 
 var enableDrop = function() {
   document.body.addEventListener('dragover', function(ev) {
@@ -108,8 +96,7 @@ var enableDrop = function() {
 
     console.log('Dropped',files)
 
-    for (var i = 0; i < files.length; i += 1) {
-      var file = files[i]
+    asarray(files).forEach(function(file) {
       console.log('Reading dropped',file)
 
       var reader = new FileReader()
@@ -118,10 +105,12 @@ var enableDrop = function() {
 
         var result = readEvent.currentTarget.result
         console.log('result',result)
-        setSkinFromArrayBuffer(result, file.name, file.type || 'image/png')
+        createSkinTexture(gl, result, file.name, file.type || 'image/png', function(err, texture) {
+          skin = texture
+        })
       })
       reader.readAsArrayBuffer(file)
-    }
+    })
   })
 }
 

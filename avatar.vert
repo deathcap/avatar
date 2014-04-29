@@ -63,7 +63,6 @@ void main() {
         // arms
         partMatrix *= rotateXaround(part == 2 ? lArmRotateX : rArmRotateX, 0.0, -0.50, 0.0);
 
-        // TODO: separate left/right arm rotations?
         // TODO: also rotate outwards
         partMatrix *= translate(0.0, -1.25, 0.0);
         partMatrix *= scale(0.5, 1.5, 0.5);

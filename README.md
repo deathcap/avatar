@@ -29,7 +29,9 @@ Or the classic "[Steve](http://minecraft.gamepedia.com/Skin)" skin from Minecraf
 
 Currently supported:
 
-* Minecraft 1.7 and earlier (64x32) skin format.
+* Minecraft 1.7 and earlier (64x32) skin format
+* Minecraft 1.8 (64x64) skin format
+* High-resolution multiples of 64x32 or 64x32 ([examples](https://github.com/deathcap/avatar/issues/6))
 
 (Minecraft is property of Mojang Specifications).
 
