@@ -23,7 +23,12 @@ var identity = mat4.create()
 // TODO: split out into an independent non-avatar module, as this is
 // mostly generic except for 1) use of w coord for index, 2) uv divisors
 
-var generateBoxesMesh = function(gl, info) {
+var generateBoxesMesh = function(gl, info, opts) {
+  info = toarray(info)
+  opts = opts || {}
+  opts.uDiv = opts.uDiv || 64
+  opts.vDiv = opts.vDiv || 64
+
   // Cube coordinates, see https://developer.mozilla.org/en-US/docs/Web/WebGL/Creating_3D_objects_using_WebGL
   var cube = new Float32Array([
     // Back face
@@ -63,7 +68,6 @@ var generateBoxesMesh = function(gl, info) {
     -0.5,  0.5, -0.5, 1.0
   ])
 
-  info = toarray(info)
   var cubeCount = info.length
 
   // add vetices for each cube
@@ -105,7 +109,6 @@ var generateBoxesMesh = function(gl, info) {
   // set UV coordinates for textures
   var uvArray = new Float32Array(2 * 4 * 6 * cubeCount)
 
-  var tw = 64, th = 64
   var setCubeFaceUV = function(face,x,y,w,h,r) {
     w = w || 8
     h = h || 8
@@ -114,17 +117,17 @@ var generateBoxesMesh = function(gl, info) {
 
     var i = face * 8
 
-    uvArray[i + (0 + r) % 4 * 2 + 0] =  x      / tw
-    uvArray[i + (0 + r) % 4 * 2 + 1] = (y + h) / th
+    uvArray[i + (0 + r) % 4 * 2 + 0] =  x      / opts.uDiv
+    uvArray[i + (0 + r) % 4 * 2 + 1] = (y + h) / opts.vDiv
 
-    uvArray[i + (1 + r) % 4 * 2 + 0] =  x      / tw
-    uvArray[i + (1 + r) % 4 * 2 + 1] =  y      / th
+    uvArray[i + (1 + r) % 4 * 2 + 0] =  x      / opts.uDiv
+    uvArray[i + (1 + r) % 4 * 2 + 1] =  y      / opts.vDiv
 
-    uvArray[i + (2 + r) % 4 * 2 + 0] = (x + w) / tw
-    uvArray[i + (2 + r) % 4 * 2 + 1] =  y      / th
+    uvArray[i + (2 + r) % 4 * 2 + 0] = (x + w) / opts.uDiv
+    uvArray[i + (2 + r) % 4 * 2 + 1] =  y      / opts.vDiv
 
-    uvArray[i + (3 + r) % 4 * 2 + 0] = (x + w) / tw
-    uvArray[i + (3 + r) % 4 * 2 + 1] = (y + h) / th
+    uvArray[i + (3 + r) % 4 * 2 + 0] = (x + w) / opts.uDiv
+    uvArray[i + (3 + r) % 4 * 2 + 1] = (y + h) / opts.vDiv
   }
 
   for (var i = 0; i < cubeCount; i += 1) {
