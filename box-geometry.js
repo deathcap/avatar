@@ -2,7 +2,7 @@
 
 var createVAO    = require('gl-vao')
 var createBuffer = require('gl-buffer')
-
+var toarray      = require('toarray')
 var glm          = require('gl-matrix')
 var mat4         = glm.mat4
 var vec3         = glm.vec3
@@ -63,6 +63,7 @@ var generateBoxesMesh = function(gl, info) {
     -0.5,  0.5, -0.5, 1.0
   ])
 
+  info = toarray(info)
   var cubeCount = info.length
 
   // add vetices for each cube

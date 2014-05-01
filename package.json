@@ -22,7 +22,8 @@
     "asarray": "^0.1.0",
     "ndarray": "^1.0.13",
     "url4data": "^0.1.0",
-    "brfs": "^1.1.1"
+    "brfs": "^1.1.1",
+    "toarray": "0.0.1"
   },
   "scripts": {
     "start": "beefy demo.js"
