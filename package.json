@@ -1,7 +1,7 @@
 {
   "name": "avatar",
   "description": "skinned avatar player model for voxel games",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "main": "avatar.js",
   "repository": {
     "type": "git",
