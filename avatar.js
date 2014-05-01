@@ -80,7 +80,7 @@ var createSkinMesh = function(gl) {
   ]})                     // ]})
 
 
-  return generateBoxesMesh(gl, boxes)
+  return generateBoxesMesh(gl, boxes, {uDiv:64, vDiv:64, setWindex:true})
 }
 
 // copy (sx,sy) wxh to (dx,dy)

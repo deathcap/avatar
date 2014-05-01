@@ -26,9 +26,9 @@ var identity = mat4.create()
 var generateBoxesMesh = function(gl, info, opts) {
   info = toarray(info)
   opts = opts || {}
-  opts.uDiv = opts.uDiv || 64
-  opts.vDiv = opts.vDiv || 64
-  opts.setWindex = opts.setWindex !== undefined ? opts.setWindex : true
+  opts.uDiv = opts.uDiv || 1
+  opts.vDiv = opts.vDiv || 1
+  opts.setWindex = opts.setWindex !== undefined ? opts.setWindex : false
 
   // Cube coordinates, see https://developer.mozilla.org/en-US/docs/Web/WebGL/Creating_3D_objects_using_WebGL
   var cube = new Float32Array([
