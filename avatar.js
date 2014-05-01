@@ -1,9 +1,6 @@
 'use strict'
 
-var glm          = require('gl-matrix')
-var mat4         = glm.mat4
-var vec3         = glm.vec3
-var generateBoxesMesh = require('./box-geometry.js')
+var generateBoxesMesh = require('box-geometry')
 
 var ndarray      = require('ndarray')
 var createTexture= require('gl-texture2d')

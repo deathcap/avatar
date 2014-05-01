@@ -13,17 +13,15 @@
     "skin"
   ],
   "dependencies": {
-    "gl-vao": "^1.1.2",
+    "box-geometry": "git://github.com/deathcap/box-geometry.git",
     "gl-matrix": "^2.1.0",
-    "gl-buffer": "^2.0.6",
     "glslify": "^1.2.1",
     "gl-texture2d": "^1.0.1",
     "get-pixels": "^1.1.0",
     "asarray": "^0.1.0",
     "ndarray": "^1.0.13",
     "url4data": "^0.1.0",
-    "brfs": "^1.1.1",
-    "toarray": "0.0.1"
+    "brfs": "^1.1.1"
   },
   "scripts": {
     "start": "beefy demo.js"
