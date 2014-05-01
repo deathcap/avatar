@@ -13,7 +13,7 @@
     "skin"
   ],
   "dependencies": {
-    "box-geometry": "git://github.com/deathcap/box-geometry.git",
+    "box-geometry": "^0.1.0",
     "gl-matrix": "^2.1.0",
     "glslify": "^1.2.1",
     "gl-texture2d": "^1.0.1",
