@@ -28,6 +28,7 @@ var generateBoxesMesh = function(gl, info, opts) {
   opts = opts || {}
   opts.uDiv = opts.uDiv || 64
   opts.vDiv = opts.vDiv || 64
+  opts.setWindex = opts.setWindex !== undefined ? opts.setWindex : true
 
   // Cube coordinates, see https://developer.mozilla.org/en-US/docs/Web/WebGL/Creating_3D_objects_using_WebGL
   var cube = new Float32Array([
@@ -76,7 +77,7 @@ var generateBoxesMesh = function(gl, info, opts) {
     var thisCube = new Float32Array(cube.length)
     thisCube.set(cube)
 
-    applyTransformToVertices(thisCube, info[i].matrix || identity, i)
+    applyTransformToVertices(thisCube, info[i].matrix || identity, opts.setWindex ? i : undefined)
 
     verticesArray.set(thisCube, cube.length * i)
   }
