@@ -5,7 +5,7 @@ Skinnable avatar player model for voxel games
 ![screenshot](http://i.imgur.com/HVvs6rv.png "Screenshot")
 
 This module is similar to @maxogden's [minecraft-skin](https://github.com/maxogden/minecraft-skin),
-but instead of using [three.js](http://threejs.org/), it uses [gl-modules](http://modules.gl/).
+but instead of using [three.js](http://threejs.org/), it uses [stackgl](http://stack.gl/).
 Returns a [gl-vao](https://github.com/gl-modules/gl-vao) object
 containing the vertices and UV coordinates for the player model,
 for use with the provided vertex and fragment shaders.
